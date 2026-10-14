@@ -1,13 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Open Cards">
-  <rect x="4" y="4" width="120" height="120" rx="18" fill="#ffffff" stroke="#656d76" stroke-width="5"/>
-  <!-- Geometric O -->
-  <circle cx="46" cy="64" r="20" fill="none" stroke="#1f2328" stroke-width="9"/>
-  <!-- Geometric C (open on the right) -->
-  <path
-    d="M 102 42 A 22 22 0 1 0 102 86"
-    fill="none"
-    stroke="#0969da"
-    stroke-width="9"
-    stroke-linecap="round"
+  <rect
+    x="5"
+    y="5"
+    width="118"
+    height="118"
+    rx="18"
+    fill="#ffffff"
+    stroke="#656d76"
+    stroke-width="5"
   />
+  <!-- Typographic OC (matches Figma: ink O + Primer blue C), inset so strokes never clip -->
+  <text
+    x="64"
+    y="86"
+    text-anchor="middle"
+    font-family="Arial Black, Arial, Helvetica, sans-serif"
+    font-size="58"
+    font-weight="700"
+    letter-spacing="-4"
+  >
+    <tspan fill="#1f2328">O</tspan><tspan fill="#0969da">C</tspan>
+  </text>
 </svg>
