@@ -16,6 +16,12 @@ type Props = {
   onChange: (blocks: Block[]) => void
 }
 
+const BLOCK_LABELS: Record<Block['type'], string> = {
+  text: 'Texto',
+  math: 'Matemática',
+  code: 'Código',
+}
+
 function languageExtension(language: string) {
   switch (language) {
     case 'javascript':
@@ -67,8 +73,8 @@ export function BlockEditor({ label, blocks, onChange }: Props) {
 
   return (
     <section className="side-editor">
-      <h3 className="side-editor-title">{label}</h3>
       <div className="side-editor-panel">
+        <h3 className="side-editor-title">{label}</h3>
         <div className="side-editor-tools">
           <button type="button" className="button-quiet" onClick={() => add('text')}>
             + Texto
@@ -81,15 +87,15 @@ export function BlockEditor({ label, blocks, onChange }: Props) {
           </button>
         </div>
 
-        {blocks.length === 0 ? (
-          <p className="muted">Añade al menos un bloque con contenido.</p>
-        ) : null}
-
         <div className="side-editor-blocks">
+          {blocks.length === 0 ? (
+            <p className="muted">Añade al menos un bloque con contenido.</p>
+          ) : null}
+
           {blocks.map((block, index) => (
             <div key={index} className="block-edit-item">
               <div className="block-edit-item-head">
-                <strong>{block.type}</strong>
+                <strong>{BLOCK_LABELS[block.type]}</strong>
                 <button
                   type="button"
                   className="button-quiet danger"
