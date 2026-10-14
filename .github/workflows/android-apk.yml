@@ -33,8 +33,11 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      # v3 still runs `sdkmanager tools`, which Google removed from the repo.
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools build-tools;36.0.0 platforms;android-36'
 
       - name: Install
         run: pnpm install --frozen-lockfile
@@ -68,14 +71,10 @@ jobs:
 
       - name: Publish GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TAG="${GITHUB_REF_NAME}"
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$APK_NAME" --clobber
-          else
-            gh release create "$TAG" "$APK_NAME" \
-              --title "Open Cards $TAG" \
-              --notes "APK de depuración (Capacitor). Misma app local-first que la PWA; los datos viven en el dispositivo."
-          fi
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.APK_NAME }}
+          name: Open Cards ${{ github.ref_name }}
+          body: |
+            APK de depuración (Capacitor). Misma app local-first que la PWA; los datos viven en el dispositivo.
+          fail_on_unmatched_files: true
