@@ -1,0 +1,723 @@
+{
+  "format": "open-cards",
+  "version": 1,
+  "exportedAt": "2026-10-13T20:00:00-06:00",
+  "decks": [
+    {
+      "name": "Series y sumas (V.A.D.)",
+      "description": "Series geométrica y exponencial, esperanza, reglas de intervalos con la FDA y sumas telescópicas.",
+      "tags": ["Probabilidad", "V.A.D.", "Examen"],
+      "cards": [
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la suma de la serie geométrica infinita $\\sum_{n=0}^{\\infty} r^n$ cuando $|r|<1$?"
+            }
+          ],
+          "back": [
+            { "type": "math", "content": "\\sum_{n=0}^{\\infty} r^n = \\frac{1}{1-r},\\quad |r|<1" },
+            {
+              "type": "text",
+              "content": "Cuándo usar: simplificar $E(X)$, $F_X$ o funciones generatrices con potencias de $q$ o $p$."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la suma $\\sum_{n=1}^{\\infty} n r^{n-1}$ (o equivalentemente $\\sum_{n=1}^{\\infty} n r^n$) si $|r|<1$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\sum_{n=1}^{\\infty} n r^{n-1} = \\frac{1}{(1-r)^2}"
+            },
+            {
+              "type": "math",
+              "content": "\\sum_{n=1}^{\\infty} n r^n = \\frac{r}{(1-r)^2}"
+            },
+            {
+              "type": "text",
+              "content": "Cuándo usar: obtener $\\mu$ de geométricas y binomiales negativas."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es el desarrollo en serie de $e^x$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "e^x = \\sum_{n=0}^{\\infty} \\frac{x^n}{n!}"
+            },
+            {
+              "type": "text",
+              "content": "Cuándo usar: normalizar o reconocer la Poisson ($e^{\\lambda}$) y la FGM."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la definición de la esperanza $E(X)$ para una V.A.D. con soporte $S_X$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "E(X) = \\sum_{x \\in S_X} x\\, f_X(x)"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuáles son las propiedades básicas de $E(X)$ (linealidad y constante)?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "E(aX+b)=aE(X)+b"
+            },
+            {
+              "type": "math",
+              "content": "E(X+Y)=E(X)+E(Y)"
+            },
+            {
+              "type": "text",
+              "content": "La suma vale aunque $X$ e $Y$ no sean independientes."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cómo se expresa $E\\bigl(g(X)\\bigr)$ para una V.A.D.?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "E\\bigl(g(X)\\bigr) = \\sum_{x \\in S_X} g(x)\\, f_X(x)"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Con la FDA $F_X$, ¿cómo se calcula $P(a < X \\le b)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "P(a < X \\le b) = F_X(b) - F_X(a)"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Con la FDA $F_X$, ¿cómo se calcula $P(a \\le X \\le b)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "P(a \\le X \\le b) = F_X(b) - F_X(a-) = F_X(b) - F_X(a) + P(X=a)"
+            },
+            {
+              "type": "text",
+              "content": "En enteros: $F_X(b)-F_X(a-1)$."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Con la FDA $F_X$, ¿cómo se calcula $P(a < X < b)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "P(a < X < b) = F_X(b-) - F_X(a) = F_X(b) - F_X(a) - P(X=b)"
+            },
+            {
+              "type": "text",
+              "content": "En enteros: $F_X(b-1)-F_X(a)$."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Con la FDA $F_X$, ¿cómo se calcula $P(a \\le X < b)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "P(a \\le X < b) = F_X(b-) - F_X(a-) = F_X(b-1) - F_X(a-1)"
+            },
+            {
+              "type": "text",
+              "content": "(Versión entera típica en V.A.D.)"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cómo se obtiene el complemento $P(X > a)$ a partir de $F_X$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "P(X > a) = 1 - F_X(a)"
+            },
+            {
+              "type": "math",
+              "content": "P(X \\ge a) = 1 - F_X(a-1) \\quad \\text{(enteros)}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Qué es una suma telescópica y cuál es su forma típica?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\sum_{k=1}^{n}\\bigl(a_k - a_{k+1}\\bigr) = a_1 - a_{n+1}"
+            },
+            {
+              "type": "text",
+              "content": "Cuándo usar: simplificar $F_X$ o sumas parciales donde los términos intermedios se cancelan."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Varianza y FGM",
+      "description": "Sumas de potencias, varianza, desviación estándar, propiedades y función generatriz de momentos.",
+      "tags": ["Probabilidad", "V.A.D.", "Examen"],
+      "cards": [
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la fórmula de la suma de potencias $\\sum_{k=1}^{n} k$?"
+            }
+          ],
+          "back": [
+            { "type": "math", "content": "\\sum_{k=1}^{n} k = \\frac{n(n+1)}{2}" }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la fórmula de $\\sum_{k=1}^{n} k^2$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la definición de $\\mathrm{Var}(X)$ y de $\\sigma_X$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\mathrm{Var}(X) = E\\bigl((X-\\mu)^2\\bigr) = E(X^2) - \\bigl(E(X)\\bigr)^2"
+            },
+            {
+              "type": "math",
+              "content": "\\sigma_X = \\sqrt{\\mathrm{Var}(X)}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuáles son las propiedades básicas de la varianza?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\mathrm{Var}(aX+b) = a^2\\,\\mathrm{Var}(X)"
+            },
+            {
+              "type": "math",
+              "content": "\\mathrm{Var}(X+Y)=\\mathrm{Var}(X)+\\mathrm{Var}(Y)\\quad\\text{si $X,Y$ independientes}"
+            },
+            {
+              "type": "text",
+              "content": "Sumar una constante no cambia la varianza; escalar por $a$ multiplica por $a^2$."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la definición de la función generatriz de momentos $\\varphi_X(t)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\varphi_X(t) = E\\bigl(e^{tX}\\bigr) = \\sum_{x \\in S_X} e^{tx} f_X(x)"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cómo se obtienen los momentos a partir de $\\varphi_X(t)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "E(X^n) = \\varphi_X^{(n)}(0)"
+            },
+            {
+              "type": "text",
+              "content": "En particular $\\mu=\\varphi_X'(0)$ y $E(X^2)=\\varphi_X''(0)$."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Si $X$ e $Y$ son independientes, ¿cuál es $\\varphi_{X+Y}(t)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\varphi_{X+Y}(t) = \\varphi_X(t)\\,\\varphi_Y(t)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Modelos discretos",
+      "description": "Binomial, geométrica (ambas convenciones), Poisson e hipergeométrica: rango, f, F, μ, σ² y φ.",
+      "tags": ["Probabilidad", "V.A.D.", "Examen", "Modelos"],
+      "cards": [
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es el rango de $X\\sim B(n,p)$?"
+            }
+          ],
+          "back": [
+            { "type": "math", "content": "S_X = \\{0,1,2,\\ldots,n\\}" }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la función de masa $f_X$ de $X\\sim B(n,p)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "f_X(x) = \\binom{n}{x} p^x (1-p)^{n-x},\\quad x=0,1,\\ldots,n"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la FDA $F_X$ de $X\\sim B(n,p)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "F_X(x) = \\sum_{k=0}^{\\lfloor x \\rfloor} \\binom{n}{k} p^k (1-p)^{n-k}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuáles son $\\mu$ y $\\sigma^2$ de $X\\sim B(n,p)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\mu = np,\\qquad \\sigma^2 = np(1-p)"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es la FGM $\\varphi_X(t)$ de $X\\sim B(n,p)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\varphi_X(t) = \\bigl(1-p + p e^{t}\\bigr)^n"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica (número de fracasos antes del primer éxito): ¿cuál es el rango de $X\\sim G(p)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "S_X = \\{0,1,2,\\ldots\\}"
+            },
+            {
+              "type": "text",
+              "content": "Convención: cuenta fracasos antes del primer éxito."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica (número de ensayos hasta el primer éxito): ¿cuál es el rango de $X\\sim G(p)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "S_X = \\{1,2,3,\\ldots\\}"
+            },
+            {
+              "type": "text",
+              "content": "Convención: cuenta ensayos hasta el primer éxito."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica (fracasos antes del primer éxito): ¿cuál es $f_X(m)$ con $q=1-p$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "f_X(m) = p q^{m},\\quad m=0,1,2,\\ldots"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica (ensayos hasta el primer éxito): ¿cuál es $f_X(m)$ con $q=1-p$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "f_X(m) = p q^{m-1},\\quad m=1,2,3,\\ldots"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica (fracasos antes del primer éxito): ¿cuál es $F_X(m)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "F_X(m) = 1 - q^{\\lfloor m \\rfloor + 1},\\quad m\\ge 0"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica (ensayos hasta el primer éxito): ¿cuál es $F_X(m)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "F_X(m) = 1 - q^{\\lfloor m \\rfloor},\\quad m\\ge 1"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica (fracasos antes del primer éxito): ¿cuál es $\\mu=E(X)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\mu = \\frac{q}{p}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica (ensayos hasta el primer éxito): ¿cuál es $\\mu=E(X)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\mu = \\frac{1}{p}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica $G(p)$ (ambas convenciones): ¿cuál es $\\mathrm{Var}(X)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\mathrm{Var}(X) = \\frac{q}{p^2}"
+            },
+            {
+              "type": "text",
+              "content": "La varianza es la misma en ambas convenciones; $q=1-p$."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Geométrica $G(p)$: ¿cuál es la FGM $\\varphi_X(t)$ (convención de ensayos hasta el primer éxito)?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\varphi_X(t) = \\frac{p e^{t}}{1 - q e^{t}},\\quad q e^{t} < 1"
+            },
+            {
+              "type": "text",
+              "content": "Para fracasos antes del éxito: $\\varphi_X(t)=\\dfrac{p}{1-q e^{t}}$."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Poisson con tasa $t\\lambda$: ¿cuál es el rango de $X$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "S_X = \\{0,1,2,\\ldots\\}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Poisson con tasa $t\\lambda$: ¿cuál es $f_X(k)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "f_X(k) = e^{-t\\lambda}\\frac{(t\\lambda)^k}{k!},\\quad k=0,1,2,\\ldots"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Poisson con tasa $t\\lambda$: ¿cuál es $F_X(x)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "F_X(x) = \\sum_{k=0}^{\\lfloor x \\rfloor} e^{-t\\lambda}\\frac{(t\\lambda)^k}{k!}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Poisson con tasa $t\\lambda$: ¿cuáles son $\\mu$ y $\\sigma^2$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\mu = \\sigma^2 = t\\lambda"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "Poisson con tasa $t\\lambda$: ¿cuál es $\\varphi_X(t)$? (aquí $t$ es el argumento de la FGM; la tasa se escribe $t\\lambda$ en la hoja)."
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\varphi_X(s) = \\exp\\bigl(t\\lambda (e^{s}-1)\\bigr)"
+            },
+            {
+              "type": "text",
+              "content": "Se usa $s$ como argumento de la FGM para no confundirlo con el tiempo $t$ de la tasa."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es el rango de $X\\sim H(N,n,b)$ (hipergeométrica)?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "S_X = \\{\\max(0,n-(N-b)),\\ldots,\\min(n,b)\\}"
+            },
+            {
+              "type": "text",
+              "content": "$N$ población, $n$ muestra, $b$ éxitos en la población."
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es $f_X(x)$ de $X\\sim H(N,n,b)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "f_X(x) = \\frac{\\binom{b}{x}\\binom{N-b}{n-x}}{\\binom{N}{n}}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuál es $F_X$ de $X\\sim H(N,n,b)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "F_X(x) = \\sum_{k\\le x} \\frac{\\binom{b}{k}\\binom{N-b}{n-k}}{\\binom{N}{n}}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Cuáles son $\\mu$ y $\\sigma^2$ de $X\\sim H(N,n,b)$?"
+            }
+          ],
+          "back": [
+            {
+              "type": "math",
+              "content": "\\mu = n\\frac{b}{N}"
+            },
+            {
+              "type": "math",
+              "content": "\\sigma^2 = n\\frac{b}{N}\\Bigl(1-\\frac{b}{N}\\Bigr)\\frac{N-n}{N-1}"
+            }
+          ]
+        },
+        {
+          "front": [
+            {
+              "type": "text",
+              "content": "¿Se suele usar FGM cerrada para la hipergeométrica en el curso?"
+            }
+          ],
+          "back": [
+            {
+              "type": "text",
+              "content": "En la práctica del curso se trabaja con $f_X$, $F_X$, $\\mu$ y $\\sigma^2$; la FGM no es la herramienta habitual para $H(N,n,b)$."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

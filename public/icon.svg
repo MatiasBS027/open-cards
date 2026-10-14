@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Open Cards">
+  <rect width="512" height="512" rx="96" fill="#1c2a24"/>
+  <rect x="92" y="118" width="210" height="260" rx="28" fill="#f3efe6"/>
+  <rect x="210" y="148" width="210" height="260" rx="28" fill="#3dbaa3"/>
+  <rect x="92" y="118" width="210" height="260" rx="28" fill="none" stroke="#1c2a24" stroke-opacity="0.25" stroke-width="8"/>
+</svg>

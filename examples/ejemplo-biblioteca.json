@@ -1,0 +1,60 @@
+{
+  "format": "open-cards",
+  "version": 1,
+  "exportedAt": "2026-10-13T18:00:00-06:00",
+  "decks": [
+    {
+      "id": "6f1c2a3e-1b0a-4a55-9f0e-2d3b5c7a9e10",
+      "name": "Límites y derivadas",
+      "description": "Repaso para el primer examen de cálculo.",
+      "tags": ["Cálculo", "Examen 1"],
+      "cards": [
+        {
+          "id": "0b7d9c34-52e1-4c8a-8d77-1a2f3e4d5c6b",
+          "front": [
+            { "type": "text", "content": "¿Qué dice la regla de L'Hôpital?" }
+          ],
+          "back": [
+            {
+              "type": "text",
+              "content": "Si $\\lim_{x\\to a} f(x) = \\lim_{x\\to a} g(x) = 0$ (o ambos tienden a $\\pm\\infty$), y se cumplen las condiciones del teorema, entonces:"
+            },
+            {
+              "type": "math",
+              "content": "\\lim_{x\\to a}\\frac{f(x)}{g(x)} = \\lim_{x\\to a}\\frac{f'(x)}{g'(x)}"
+            }
+          ],
+          "state": "understood"
+        },
+        {
+          "id": "c4e8a1d2-7f30-4b9e-a6c5-3d2e1f0a9b8c",
+          "front": [
+            { "type": "text", "content": "¿Cuál es la derivada de $\\sin x$?" }
+          ],
+          "back": [
+            { "type": "math", "content": "\\frac{d}{dx}\\sin x = \\cos x" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "SQL básico",
+      "tags": ["Bases de datos"],
+      "cards": [
+        {
+          "front": [
+            { "type": "text", "content": "¿Cómo se cuentan las filas de la tabla `students`?" }
+          ],
+          "back": [
+            {
+              "type": "code",
+              "language": "sql",
+              "content": "SELECT COUNT(*) FROM students;"
+            }
+          ],
+          "state": "needs_review"
+        }
+      ]
+    }
+  ]
+}
