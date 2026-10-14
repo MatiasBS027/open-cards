@@ -391,21 +391,42 @@ textarea {
 /* —— Flash cards (deck list) —— */
 .flash-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.flash-create-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  aspect-ratio: 1 / 1;
+  min-height: 180px;
+  padding: 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--bg) 65%, var(--bg-elev));
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.flash-create-card:hover {
+  border-color: var(--accent);
+  text-decoration: none;
 }
 
 .flash-card {
   display: grid;
   grid-template-rows: auto 1fr auto;
   aspect-ratio: 1 / 1;
-  min-height: 220px;
+  min-height: 180px;
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 18px;
   box-shadow: var(--shadow);
-  padding: 0.85rem;
-  gap: 0.55rem;
+  padding: 0.75rem;
+  gap: 0.5rem;
 }
 
 .flash-card-top {
@@ -703,19 +724,97 @@ textarea {
   gap: 1.25rem;
 }
 
-/* —— Editors / misc —— */
-.block-editor {
+/* —— Card editor —— */
+.card-edit-page {
+  max-width: 720px;
+}
+
+.card-edit-layout {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.side-editor {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.side-editor-title {
   margin: 0;
+  font-size: 1.05rem;
+}
+
+.side-editor-panel {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow);
+}
+
+.side-editor-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.side-editor-blocks {
   display: grid;
   gap: 0.85rem;
 }
 
-.block-editor-header {
+.block-edit-item {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  box-shadow: none;
+}
+
+.block-edit-item-head {
   display: flex;
-  gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.block-edit-body {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.card-edit-preview {
+  margin-top: 1.25rem;
+}
+
+.card-edit-preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.preview-mini {
+  display: grid;
+  gap: 0.45rem;
+  min-height: 7rem;
+  padding: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+@media (max-width: 640px) {
+  .card-edit-preview-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .blocks {

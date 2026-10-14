@@ -339,50 +339,53 @@ export function DeckPage() {
 
       <section className="section-gap">
         <h2>Tarjetas ({cards.length})</h2>
-        {cards.length === 0 ? (
-          <div className="empty-deck">
-            <p>0 tarjetas. Añade la primera para estudiar.</p>
-            <Link className="button" to={`/decks/${deckId}/cards/new`}>
-              + Añadir tarjeta
-            </Link>
-          </div>
-        ) : (
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={(e) => void onDragEnd(e)}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={(e) => void onDragEnd(e)}
+        >
+          <SortableContext
+            items={cards.map((c) => c.id)}
+            strategy={rectSortingStrategy}
           >
-            <SortableContext
-              items={cards.map((c) => c.id)}
-              strategy={rectSortingStrategy}
-            >
-              <div className="flash-card-grid">
-                {cards.map((card) => (
-                  <SortableCard
-                    key={card.id}
-                    card={card}
-                    flipped={Boolean(flipped[card.id])}
-                    onFlip={() => {
-                      setFlipped((f) => ({ ...f, [card.id]: !f[card.id] }))
-                      if (card.state === 'unseen') {
-                        void setCardState(card.id, 'flip').then(() => reload())
-                      }
-                    }}
-                    onOpen={() =>
-                      navigate(`/decks/${deckId}/cards/${card.id}`)
+            <div className="flash-card-grid">
+              <Link
+                to={`/decks/${deckId}/cards/new`}
+                className="flash-create-card"
+              >
+                <span className="deck-create-plus" aria-hidden>
+                  +
+                </span>
+                <span className="deck-create-label">Nueva tarjeta</span>
+              </Link>
+              {cards.map((card) => (
+                <SortableCard
+                  key={card.id}
+                  card={card}
+                  flipped={Boolean(flipped[card.id])}
+                  onFlip={() => {
+                    setFlipped((f) => ({ ...f, [card.id]: !f[card.id] }))
+                    if (card.state === 'unseen') {
+                      void setCardState(card.id, 'flip').then(() => reload())
                     }
-                    onDelete={() =>
-                      void deleteCard(card.id).then((removed) => {
-                        if (removed) setUndoCard(removed)
-                        void reload()
-                      })
-                    }
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
-        )}
+                  }}
+                  onOpen={() =>
+                    navigate(`/decks/${deckId}/cards/${card.id}`)
+                  }
+                  onDelete={() =>
+                    void deleteCard(card.id).then((removed) => {
+                      if (removed) setUndoCard(removed)
+                      void reload()
+                    })
+                  }
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+        {cards.length === 0 ? (
+          <p className="muted">Aún no hay tarjetas. Usa el + para crear la primera.</p>
+        ) : null}
       </section>
 
       {undoCard ? (
