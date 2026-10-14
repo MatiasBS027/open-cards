@@ -71,6 +71,8 @@ export interface Settings {
   profileName: string
   /** Optional local avatar as a data URL (JPEG/PNG), or null for the default person icon. */
   profileAvatarDataUrl: string | null
+  /** Last update prompt the user dismissed (semver without `v`), or null. */
+  dismissedUpdateVersion: string | null
 }
 
 export interface DeckProgress {

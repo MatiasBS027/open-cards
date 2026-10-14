@@ -6,7 +6,7 @@ import { deckHasAllTags, deckMatchesQuery } from '../../domain/search'
 import { computeProgress } from '../../domain/state'
 import { normalizeTagName } from '../../domain/tags'
 import type { Deck } from '../../domain/types'
-import { ensureSettings } from '../../storage/db'
+import { dismissUpdateVersion, ensureSettings } from '../../storage/db'
 import {
   createDeck,
   deleteDeck,
@@ -18,9 +18,11 @@ import {
   searchCards,
   setDeckTags,
 } from '../../storage/repositories'
+import { checkForAppUpdate, type ReleaseUpdate } from '../../update/checkUpdate'
 import { BackupReminder } from '../components/BackupReminder'
 import { HomeChrome } from '../components/HomeChrome'
 import { UndoToast } from '../components/UndoToast'
+import { UpdateBanner } from '../components/UpdateBanner'
 import { FadeContent } from '../motion/FadeContent'
 
 function parseTagsInput(value: string): string[] {
@@ -46,6 +48,9 @@ export function HomePage() {
   >([])
   const [showBackup, setShowBackup] = useState(false)
   const [backupDismissed, setBackupDismissed] = useState(false)
+  const [availableUpdate, setAvailableUpdate] = useState<ReleaseUpdate | null>(
+    null,
+  )
   const [undo, setUndo] = useState<{
     deck: Deck
     cards: Awaited<ReturnType<typeof listCards>>
@@ -91,9 +96,29 @@ export function HomePage() {
     setShowBackup(shouldShowBackupReminder(settings))
   }
 
+  const refreshUpdate = async () => {
+    try {
+      const settings = await ensureSettings()
+      const update = await checkForAppUpdate()
+      if (!update) {
+        setAvailableUpdate(null)
+        return
+      }
+      if (settings.dismissedUpdateVersion === update.version) {
+        setAvailableUpdate(null)
+        return
+      }
+      setAvailableUpdate(update)
+    } catch {
+      // Network / API errors: stay quiet on home; Settings can retry.
+      setAvailableUpdate(null)
+    }
+  }
+
   useEffect(() => {
     void reload()
     void refreshBackup()
+    void refreshUpdate()
   }, [])
 
   useEffect(() => {
@@ -166,6 +191,17 @@ export function HomePage() {
   return (
     <div className="page">
       <HomeChrome />
+
+      {availableUpdate ? (
+        <UpdateBanner
+          update={availableUpdate}
+          onDismiss={() => {
+            const version = availableUpdate.version
+            setAvailableUpdate(null)
+            void dismissUpdateVersion(version)
+          }}
+        />
+      ) : null}
 
       {showBackup && !backupDismissed ? (
         <BackupReminder

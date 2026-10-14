@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { APP_VERSION, GITHUB_RELEASES_LATEST } from '../../config'
 import type { ThemePreference } from '../../domain/types'
 import { downloadJson, exportAll } from '../../importExport/exportLibrary'
 import { ensureSettings, updateProfile } from '../../storage/db'
+import { checkForAppUpdate } from '../../update/checkUpdate'
 import { PersonIcon } from '../components/PersonIcon'
 import { fileToAvatarDataUrl } from '../profileAvatar'
 import { useTheme } from '../theme'
@@ -15,6 +17,8 @@ export function SettingsPage() {
   const [editingProfile, setEditingProfile] = useState(false)
   const [draftName, setDraftName] = useState('')
   const [profileError, setProfileError] = useState('')
+  const [updateStatus, setUpdateStatus] = useState('')
+  const [checkingUpdate, setCheckingUpdate] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const reloadProfile = async () => {
@@ -61,6 +65,29 @@ export function SettingsPage() {
   }
 
   const displayName = name.trim() || 'Tu perfil'
+
+  const onCheckUpdate = async () => {
+    setCheckingUpdate(true)
+    setUpdateStatus('')
+    try {
+      const update = await checkForAppUpdate()
+      if (!update) {
+        setUpdateStatus(`Ya estás en la última versión (${APP_VERSION}).`)
+        return
+      }
+      const href = update.apkUrl ?? update.htmlUrl
+      setUpdateStatus(
+        `Hay una actualización: ${update.tagName}. Abrí Descargar APK o Releases.`,
+      )
+      window.open(href, '_blank', 'noopener,noreferrer')
+    } catch (err) {
+      setUpdateStatus(
+        err instanceof Error ? err.message : 'No se pudo comprobar la actualización.',
+      )
+    } finally {
+      setCheckingUpdate(false)
+    }
+  }
 
   return (
     <div className="page settings-page">
@@ -257,13 +284,34 @@ export function SettingsPage() {
               </span>
               <span>
                 <strong>Versión</strong>
-                <span className="muted">0.1.4 · local-first</span>
+                <span className="muted">{APP_VERSION} · local-first</span>
               </span>
             </span>
           </div>
+          <button
+            type="button"
+            className="settings-row"
+            disabled={checkingUpdate}
+            onClick={() => void onCheckUpdate()}
+          >
+            <span className="settings-row-main">
+              <span className="settings-icon settings-icon-teal" aria-hidden>
+                ↻
+              </span>
+              <span>
+                <strong>Buscar actualización</strong>
+                <span className="muted">
+                  {updateStatus || 'Consulta GitHub Releases'}
+                </span>
+              </span>
+            </span>
+            <span className="settings-chevron" aria-hidden>
+              ›
+            </span>
+          </button>
           <a
             className="settings-row"
-            href="https://github.com/MatiasBS027/open-cards/releases/latest"
+            href={GITHUB_RELEASES_LATEST}
             target="_blank"
             rel="noreferrer"
           >

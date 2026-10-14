@@ -848,7 +848,8 @@ textarea {
   gap: 0.55rem;
 }
 
-.backup-banner {
+.backup-banner,
+.update-banner {
   display: grid;
   gap: 0.75rem;
   margin-bottom: 1rem;
@@ -858,10 +859,22 @@ textarea {
   background: var(--bg-elev);
 }
 
-.backup-banner-text {
+.update-banner {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+.backup-banner-text,
+.update-banner-text {
   margin: 0;
   color: var(--ink);
   font-size: 0.95rem;
+}
+
+a.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .library-toolbar {

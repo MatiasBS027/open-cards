@@ -16,9 +16,10 @@ TypeScript estricto, Vite, React, Dexie (IndexedDB), MathLive, KaTeX, CodeMirror
 - `src/domain/`: TypeScript puro. **Sin imports de React, Dexie, DOM ni librerías de UI.** Aquí viven tipos, transiciones de estado, orden, normalización de etiquetas y validación.
 - `src/storage/`: Dexie, repositorios y migraciones.
 - `src/importExport/`: validación con Ajv usando `schema/open-cards.v1.schema.json`, borradores y exportación.
+- `src/update/`: consulta a GitHub Releases (versión / APK); sin lógica de UI.
 - `src/ui/`: componentes React.
-- `src/config.ts`: constantes (límites de importación, tiempo de deshacer, días de aviso de respaldo). No dispersar números mágicos.
-- Dependencias permitidas: `ui` → `storage`/`importExport` → `domain`. Nunca al revés.
+- `src/config.ts`: constantes (límites de importación, tiempo de deshacer, días de aviso de respaldo, repo/versión). No dispersar números mágicos. `APP_VERSION` se inyecta desde `package.json` vía Vite `define`.
+- Dependencias permitidas: `ui` → `storage`/`importExport`/`update` → `domain`. Nunca al revés.
 
 ## Reglas de negocio que no se rompen
 
@@ -59,7 +60,7 @@ TypeScript estricto, Vite, React, Dexie (IndexedDB), MathLive, KaTeX, CodeMirror
 
 ## Despliegue
 
-- **APK (principal en Android):** Capacitor envuelve el mismo build web. Siempre `VITE_BASE=/`. Publicar: `git tag vX.Y.Z && git push origin vX.Y.Z` → `android-apk.yml` adjunta el APK a la Release. Sin sync ni backend; datos = IndexedDB local + JSON import/export.
+- **APK (principal en Android):** Capacitor envuelve el mismo build web. Siempre `VITE_BASE=/`. Publicar: bump `package.json` version, `git tag vX.Y.Z && git push origin vX.Y.Z` → `android-apk.yml` adjunta el APK a la Release. Sin sync ni backend; datos = IndexedDB local + JSON import/export. La app puede avisar de updates leyendo la API pública de Releases (abre el enlace del APK; no fuerza instalación).
 - **Demo web / PC:** GitHub Pages (`VITE_BASE=/open-cards/`, `HashRouter`). No sustituye al APK en el teléfono del autor.
 
 ## Cuando falte información

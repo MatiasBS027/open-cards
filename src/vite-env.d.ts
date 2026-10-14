@@ -4,6 +4,10 @@
 
 import type { DetailedHTMLProps, HTMLAttributes } from 'react'
 
+declare global {
+  const __APP_VERSION__: string
+}
+
 declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
@@ -17,3 +21,5 @@ declare module 'react' {
     }
   }
 }
+
+export {}

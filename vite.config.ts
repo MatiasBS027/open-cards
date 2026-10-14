@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 import { VitePWA } from 'vite-plugin-pwa'
+import packageJson from './package.json' with { type: 'json' }
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
@@ -11,6 +12,9 @@ const base = process.env.VITE_BASE ?? '/open-cards/'
 
 export default defineConfig({
   base,
+  define: {
+    __APP_VERSION__: JSON.stringify(packageJson.version),
+  },
   plugins: [
     react(),
     VitePWA({

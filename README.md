@@ -32,7 +32,7 @@ Muchas apps de flashcards meten tu progreso en la nube, te empujan a una cuenta 
 
 Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y trozos de código. El contenido importado es **dato**, nunca se ejecuta.
 
-> Estado actual (v0.1.2): MVP usable. En Android preferimos el **APK**; Pages queda como demo web en PC. Sin cuentas ni sync: el puente entre dispositivos es importar/exportar JSON. Detalle en [`SPEC.md`](SPEC.md) y [`CHANGELOG.md`](CHANGELOG.md).
+> Estado actual (v0.1.5): MVP usable. En Android preferimos el **APK**; Pages queda como demo web en PC. Sin cuentas ni sync: el puente entre dispositivos es importar/exportar JSON. Detalle en [`SPEC.md`](SPEC.md) y [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Características
 
@@ -43,6 +43,7 @@ Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y
 - LaTeX en línea dentro del texto (`$x^2$`) y fórmulas destacadas con MathLive + KaTeX.
 - Código con resaltado (CodeMirror); nunca se ejecuta.
 - Reordenar tarjetas arrastrando (ratón, tacto y teclado).
+- Buscar mazos/tarjetas; filtrar por etiquetas; duplicar mazos; duplicar/mover tarjetas.
 
 **Estudio**
 
@@ -58,12 +59,14 @@ Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y
 - La importación pasa siempre por un **borrador editable** y no escribe nada hasta que confirmas.
 - Importar crea mazos nuevos con IDs nuevos; no inventa tarjetas.
 - Deshacer eliminación (~8 s) con confirmación al borrar un mazo.
+- Aviso de respaldo tras ~14 días con cambios sin exportar.
 
 **App**
 
 - **APK Android** (Capacitor) — camino principal en el teléfono; misma app local-first.
+- Al abrir (y en Ajustes) comprueba si hay un APK más nuevo en GitHub Releases.
 - Demo web en GitHub Pages (PC / compartir enlace); también funciona offline como PWA si alguien la instala desde el navegador.
-- Tema claro / oscuro / sistema.
+- Ajustes: perfil local (nombre + foto), tema claro/oscuro/sistema, import/export.
 - Interfaz en español; código y esquema en inglés.
 - Sin cuentas ni sincronización en la nube: entre PC y teléfono usas exportar/importar JSON.
 
@@ -82,15 +85,18 @@ La misma app empaquetada con [Capacitor](https://capacitorjs.com/) para Android:
 - **Última release:** [github.com/MatiasBS027/open-cards/releases/latest](https://github.com/MatiasBS027/open-cards/releases/latest)
 - El archivo se llama `open-cards-vX.Y.Z-debug.apk` (build de depuración firmado con la keystore de debug de Android).
 - No hay cuenta ni sync: IndexedDB sigue siendo local en el dispositivo.
+- La app consulta la API pública de Releases; si hay una versión mayor, muestra un aviso y enlaza al APK (no instala sola: hay que abrir/descargar e instalar). Eso solo aplica después de publicar un tag `v*` nuevo (esta Release); ideas para la siguiente iteración en [`SPEC.md`](SPEC.md) §20.
 
 **Cómo publicar un APK nuevo**
 
 ```bash
-git tag v0.1.1          # bump semver
-git push origin v0.1.1  # dispara Android APK → GitHub Release
+# 1. bump version in package.json (feeds __APP_VERSION__)
+# 2. commit, then:
+git tag v0.1.5
+git push origin v0.1.5  # dispara Android APK → GitHub Release
 ```
 
-Un push a `main` actualiza la demo en Pages. El APK del teléfono solo cambia con un tag `v*` nuevo (y reinstalar/actualizar desde Releases).
+Un push a `main` actualiza la demo en Pages. El APK del teléfono solo cambia con un tag `v*` nuevo.
 
 ## Inicio rápido
 
@@ -135,9 +141,10 @@ Para release firmado (Play Store / distribución propia), abre el proyecto con `
 src/domain/        reglas puras (tipos, estados, orden, etiquetas) — sin React ni Dexie
 src/storage/       IndexedDB vía Dexie, migraciones y repositorios
 src/importExport/  validación Ajv + borradores de importación / exportación
+src/update/        chequeo de versión vía GitHub Releases API
 src/ui/            pantallas React
 src/math/          renderizado KaTeX (trust: false)
-android/           proyecto Capacitor (envoltorio nativo opcional)
+android/           proyecto Capacitor (envoltorio nativo / APK)
 schema/            open-cards.v1.schema.json
 examples/          JSON de demostración
 ```

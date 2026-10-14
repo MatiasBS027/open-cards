@@ -39,11 +39,13 @@ export async function ensureSettings(): Promise<Settings> {
       notifications: existing.notifications ?? [],
       profileName: existing.profileName ?? '',
       profileAvatarDataUrl: existing.profileAvatarDataUrl ?? null,
+      dismissedUpdateVersion: existing.dismissedUpdateVersion ?? null,
     }
     if (
       !existing.notifications ||
       existing.profileName === undefined ||
-      existing.profileAvatarDataUrl === undefined
+      existing.profileAvatarDataUrl === undefined ||
+      existing.dismissedUpdateVersion === undefined
     ) {
       await db.settings.put(normalized)
     }
@@ -58,6 +60,7 @@ export async function ensureSettings(): Promise<Settings> {
     notifications: [],
     profileName: '',
     profileAvatarDataUrl: null,
+    dismissedUpdateVersion: null,
   }
   await db.settings.put(defaults)
   return defaults
@@ -69,6 +72,12 @@ export async function updateProfile(patch: {
 }): Promise<Settings> {
   await ensureSettings()
   await db.settings.update('app', patch)
+  return ensureSettings()
+}
+
+export async function dismissUpdateVersion(version: string): Promise<Settings> {
+  await ensureSettings()
+  await db.settings.update('app', { dismissedUpdateVersion: version })
   return ensureSettings()
 }
 

@@ -1,6 +1,6 @@
 # Open Cards — Especificación del proyecto
 
-**Estado:** especificación v2.2 — MVP usable en producción (PWA + Pages + APK Capacitor), incluyendo aviso de respaldo, búsqueda/filtro y duplicar/mover.
+**Estado:** especificación v2.3 — MVP usable en producción (PWA + Pages + APK Capacitor), incluyendo aviso de respaldo, búsqueda/filtro, duplicar/mover, ajustes con perfil local y aviso de actualización de APK vía GitHub Releases.
 **Objetivo:** definir el producto, las decisiones tomadas, la arquitectura, los requisitos funcionales, las pruebas de aceptación y lo que sigue abierto, de modo que una persona o un agente de código pueda implementar el MVP sin adivinar.
 
 Documentos relacionados: `README.md`, `AGENTS.md`, `CHANGELOG.md`, `schema/open-cards.v1.schema.json`, `examples/ejemplo-biblioteca.json`.
@@ -60,7 +60,7 @@ Open Cards es una aplicación de tarjetas de estudio de código abierto, local-f
 | Deshacer | Tras eliminar una tarjeta o un mazo aparece un aviso inferior con «Deshacer» (≈8 s). Los mazos además piden confirmación indicando cuántas tarjetas se eliminan. Deshacer un mazo restaura mazo y tarjetas; **no** restaura la sesión de estudio. |
 | Exportación | Se puede exportar un mazo o toda la biblioteca. Incluye el estado de aprendizaje. |
 | Importación | Siempre **añade** mazos nuevos (IDs nuevos). No hay «reemplazar biblioteca» en el núcleo. Con varios mazos, cada uno se revisa y confirma por separado. |
-| Settings | `theme`, `lastBackupAt`, `hasLocalChangesSinceBackup`, `storagePersistAsked` (ver §9). |
+| Settings | `theme`, `lastBackupAt`, `hasLocalChangesSinceBackup`, `storagePersistAsked`, `notifications`, `profileName`, `profileAvatarDataUrl`, `dismissedUpdateVersion` (ver §9). |
 | Arranque | Primero núcleo usable (mazos, editor, estados, sesión, export/import añadir, tema); el resto del MVP después. |
 | `targetCardCount` | **Eliminado** del modelo y del formato: no tenía uso real. |
 | Modo oscuro | Sí: sistema / claro / oscuro. Tamaño de letra: sin ajuste propio. |
@@ -219,7 +219,7 @@ Desde la lista de tarjetas se puede abrir una tarjeta, voltearla (aplica la regl
 - **Tag:** `id`, `name` (nombre original), `normalizedName` (recortado, espacios colapsados, minúsculas; único).
 - **DeckTag:** relación mazo–etiqueta.
 - **StudySession:** ver §7.
-- **Settings:** `theme` (`system` \| `light` \| `dark`), `lastBackupAt` (ISO \| null), `hasLocalChangesSinceBackup` (boolean), `storagePersistAsked` (boolean).
+- **Settings:** `theme` (`system` \| `light` \| `dark`), `lastBackupAt` (ISO \| null), `hasLocalChangesSinceBackup` (boolean), `storagePersistAsked` (boolean), `notifications` (lista local), `profileName` (string), `profileAvatarDataUrl` (data URL \| null), `dismissedUpdateVersion` (semver \| null). Perfil solo local (sin cuentas). Actualización de APK: la app consulta GitHub Releases; si hay versión mayor, avisa y enlaza al APK / release (no descarga ni instala en segundo plano en el MVP).
 
 Todos los IDs son UUID v4 generados en el cliente.
 
@@ -466,16 +466,30 @@ Una tarjeta es válida si frente y reverso tienen al menos un bloque con conteni
 2. ~~**Prototipo math**~~ — MathLive → LaTeX → KaTeX e inline `$...$`.
 3. ~~**Dominio**~~ — tipos, estados, orden, validación, Vitest.
 4. ~~**Núcleo usable**~~ — Dexie, mazos/tarjetas, editor, reordenar, estados, sesión, export/import, tema.
-5. ~~**Resto del MVP**~~ — PWA, Pages, APK, búsqueda/filtro, aviso 14 días, duplicar/mover.
+5. ~~**Resto del MVP**~~ — PWA, Pages, APK, búsqueda/filtro, aviso 14 días, duplicar/mover, ajustes/perfil local, aviso de actualización APK.
 6. **Calidad y docs:** aceptar §19, accesibilidad, mantener SPEC/AGENTS/CHANGELOG.
 
-**Despliegue:** el camino principal en teléfono es el **APK** (Capacitor). Tag `v*` → workflow Android → GitHub Release. Push a `main` actualiza la demo en GitHub Pages (útil en PC / compartir enlace). Pages y APK no comparten IndexedDB; sin sync en la nube, el puente de datos es importar/exportar JSON.
+**Despliegue:** el camino principal en teléfono es el **APK** (Capacitor). Tag `v*` → workflow Android → GitHub Release. Push a `main` actualiza la demo en GitHub Pages (útil en PC / compartir enlace). Pages y APK no comparten IndexedDB; sin sync en la nube, el puente de datos es importar/exportar JSON. La app puede avisar de una Release más nueva abriendo el enlace del APK. El aviso solo aparece tras publicar un tag `v*` (bump `package.json` + push del tag); sin Release nueva no hay update que mostrar.
 
-Posteriores: sincronización, Docker, MCP, imágenes, historial y repetición espaciada.
+### Siguiente iteración (inspirado en SpotiFLAC; opcional)
+
+Ya en MVP: comparar semver con `/releases/latest`, banner + Ajustes, dismiss por versión, abrir URL del APK/release.
+
+Candidatos compactos (no bloquean el MVP):
+
+1. **Diálogo con changelog** — mostrar el `body` de la Release (markdown truncado) en un modal, no solo el enlace.
+2. **Caché + ETag** — guardar la respuesta de Releases y revalidar con `If-None-Match` (menos llamadas; fallback offline al último snapshot).
+3. **Descarga / instalación in-app** — en Capacitor Android, descargar el APK y abrir el instalador del sistema (File / FileOpener o equivalente); verificar SHA-256 del asset si GitHub lo expone.
+4. **Variantes ABI** — si un día hay APKs arm64/arm32/universal, elegir el asset según ABI del dispositivo.
+5. **Force-update suave** — si la instalación va N releases estables atrás (p. ej. ≥3), insistir más fuerte (sin bloquear estudio si no hay red).
+6. **Canal preview** — opcional: considerar prereleases solo desde Ajustes.
+
+Posteriores (producto): sincronización, Docker, MCP, imágenes, historial y repetición espaciada.
 
 ## 21. Referencias de inspiración
 
 - `namidaco/namida`: https://github.com/namidaco/namida
 - `DuarteSantos8/openGym`: https://github.com/DuarteSantos8/openGym
+- `spotiflacapp/SpotiFLAC-Mobile`: https://github.com/spotiflacapp/SpotiFLAC-Mobile (aviso de actualización vía GitHub Releases)
 
 Son solo inspiración de producto y despliegue; no implican copiar código ni arquitectura.

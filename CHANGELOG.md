@@ -2,6 +2,14 @@
 
 All notable changes to Open Cards are documented here.
 
+## [v0.1.5](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.5) — 2026-10-14
+
+### Added
+
+- In-app update check against GitHub Releases (home banner + Settings → Buscar actualización). Opens the APK / release page; dismiss remembers the version.
+- Docs sync for local profile, OC logo, APK-first notes, and update flow (SPEC v2.3).
+- SPEC §20 notes next-iteration SpotiFLAC-inspired update ideas (changelog dialog, ETag cache, in-app APK install, ABI pick, soft force-update).
+
 ## [v0.1.4](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.4) — 2026-10-14
 
 ### Changed
@@ -21,7 +29,7 @@ All notable changes to Open Cards are documented here.
 ### Added
 
 - OC monogram logo (geometric O + blue C) for app, PWA, and Android icons.
-- Settings page (GitHub profile, theme, import/export, APK/repo links).
+- Settings page (local profile placeholder later refined in v0.1.4, theme, import/export, APK/repo links).
 - Notifications inbox + home bell; backup reminder also lands there.
 
 ### Fixed
