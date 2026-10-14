@@ -366,7 +366,7 @@ Una tarjeta es válida si frente y reverso tienen al menos un bloque con conteni
 - MCP o generación de tarjetas con IA.
 - Etiquetas de tarjeta.
 - Markdown/formato de texto.
-- Aplicaciones nativas, Docker, soporte específico de iOS.
+- Docker y soporte específico de iOS. El empaquetado Android opcional vía Capacitor (APK) es un envoltorio de la misma app web local-first; no añade sincronización.
 - Ajuste de tamaño de letra.
 
 ## 19. Pruebas de aceptación

@@ -7,15 +7,17 @@
 **Flashcards locales que puedes estudiar offline — con matemáticas y código, sin cuentas.**
 
 Crea mazos, edita tarjetas con LaTeX y bloques de código, estudia en el teléfono o en el PC.<br>
-Todo vive en tu navegador. Sin servidor, sin suscripción, sin gamificación.
+Todo vive en tu dispositivo. Sin servidor, sin suscripción, sin gamificación.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-3dbaa3?style=flat-square)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/MatiasBS027/open-cards?style=flat-square&logo=github&logoColor=white)](https://github.com/MatiasBS027/open-cards/stargazers)
 [![Pages](https://img.shields.io/github/actions/workflow/status/MatiasBS027/open-cards/deploy-pages.yml?branch=main&label=pages&style=flat-square)](https://github.com/MatiasBS027/open-cards/actions/workflows/deploy-pages.yml)
+[![APK](https://img.shields.io/github/actions/workflow/status/MatiasBS027/open-cards/android-apk.yml?branch=main&label=apk&style=flat-square)](https://github.com/MatiasBS027/open-cards/actions/workflows/android-apk.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8?style=flat-square)](https://matiasbs027.github.io/open-cards/)
 
 [Demo en vivo](https://matiasbs027.github.io/open-cards/) ·
+[Descargar APK](https://github.com/MatiasBS027/open-cards/releases/latest) ·
 [Especificación](SPEC.md) ·
 [Esquema JSON](schema/open-cards.v1.schema.json) ·
 [Guía para agentes](AGENTS.md)
@@ -30,7 +32,7 @@ Muchas apps de flashcards meten tu progreso en la nube, te empujan a una cuenta 
 
 Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y trozos de código. El contenido importado es **dato**, nunca se ejecuta.
 
-> Estado actual: núcleo usable (mazos, editor, estudio, import/export, PWA). La hoja de ruta del producto está en [`SPEC.md`](SPEC.md).
+> Estado actual: núcleo usable (mazos, editor, estudio, import/export, PWA). Empaquetado Android opcional con Capacitor. La hoja de ruta del producto está en [`SPEC.md`](SPEC.md).
 
 ## Características
 
@@ -60,18 +62,31 @@ Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y
 **App**
 
 - PWA instalable; funciona offline.
+- APK Android opcional (Capacitor) — misma app local-first, sin sincronización en la nube.
 - Tema claro / oscuro / sistema.
 - Interfaz en español; código y esquema en inglés.
 
-## Probarlo ya
+## Probarlo ya (PWA)
 
 No hace falta clonar el repo:
 
 1. Abre la [demo en GitHub Pages](https://matiasbs027.github.io/open-cards/).
-2. En Android (Chrome): menú → **Instalar aplicación** / **Añadir a la pantalla de inicio**.
+2. En Android, usa **Chrome** → menú → **Instalar aplicación** / **Añadir a la pantalla de inicio**.
 3. Opcional: importa un ejemplo desde [`examples/`](examples/) (p. ej. [`probabilidad-biblioteca.json`](examples/probabilidad-biblioteca.json)).
 
-Todo se guarda en **tu** navegador. Si borras los datos del sitio, se pierden: exporta respaldos con regularidad.
+**Nota sobre Brave (Android):** Brave suele crear un acceso directo del navegador en lugar de una PWA instalable de verdad. Para instalar la app como PWA, usa Chrome (o Edge). Si prefieres un instalador nativo, descarga el [APK](#descargar-apk).
+
+Todo se guarda en **tu** navegador o dispositivo. Si borras los datos del sitio o desinstalas la app, se pierden: exporta respaldos con regularidad.
+
+## Descargar APK
+
+La misma app empaquetada con [Capacitor](https://capacitorjs.com/) para Android:
+
+- **Última release:** [github.com/MatiasBS027/open-cards/releases/latest](https://github.com/MatiasBS027/open-cards/releases/latest)
+- El archivo se llama `open-cards-vX.Y.Z-debug.apk` (build de depuración firmado con la keystore de debug de Android).
+- No hay cuenta ni sync: IndexedDB sigue siendo local en el dispositivo.
+
+Para publicar una release nueva: crea un tag `v*` (p. ej. `v0.1.0`) y empújalo; el workflow [Android APK](.github/workflows/android-apk.yml) construye el APK y lo adjunta a la release.
 
 ## Inicio rápido
 
@@ -88,11 +103,27 @@ pnpm dev
 |---|---|
 | `pnpm dev` | Servidor de desarrollo |
 | `pnpm test` | Pruebas (Vitest) |
-| `pnpm build` | Build de producción en `dist/` |
+| `pnpm build` | Build de producción en `dist/` (Pages: `VITE_BASE=/open-cards/`) |
 | `pnpm preview` | Previsualizar el build |
 | `pnpm lint` | Linter (oxlint) |
+| `pnpm icons` | Regenerar PWA + iconos Android desde `public/icon.svg` |
+| `pnpm build:android` | Build con `VITE_BASE=/` y `cap sync` |
+| `pnpm android:assemble` | Build + APK debug (`android/…/app-debug.apk`) |
+| `pnpm cap:open` | Abrir el proyecto en Android Studio |
 
-La ruta base de GitHub Pages se configura con `VITE_BASE` (por defecto `/open-cards/`). El workflow de CI la ajusta al nombre del repositorio.
+La ruta base de GitHub Pages se configura con `VITE_BASE` (por defecto `/open-cards/`). El workflow de CI la ajusta al nombre del repositorio. El APK siempre usa `VITE_BASE=/` porque Capacitor sirve los assets desde la raíz del WebView (`HashRouter` no depende de rutas del servidor).
+
+### Construir el APK en local
+
+Requisitos extra: JDK 21+ y Android SDK (`ANDROID_HOME`).
+
+```bash
+pnpm icons          # opcional: logo gris/blanco → mipmaps
+pnpm android:assemble
+# APK: android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+Para release firmado (Play Store / distribución propia), abre el proyecto con `pnpm cap:open`, configura el signing en Android Studio y ejecuta `assembleRelease`.
 
 ## Cómo funciona
 
@@ -102,6 +133,7 @@ src/storage/       IndexedDB vía Dexie, migraciones y repositorios
 src/importExport/  validación Ajv + borradores de importación / exportación
 src/ui/            pantallas React
 src/math/          renderizado KaTeX (trust: false)
+android/           proyecto Capacitor (envoltorio nativo opcional)
 schema/            open-cards.v1.schema.json
 examples/          JSON de demostración
 ```
@@ -116,7 +148,7 @@ Dependencias permitidas: `ui` → `storage` / `importExport` → `domain`. Nunca
 
 **Persistencia**
 
-Todo vive en IndexedDB. Al arrancar se pide `navigator.storage.persist()` cuando el navegador lo permite. Un respaldo completo es exportar la biblioteca a JSON.
+Todo vive en IndexedDB. Al arrancar se pide `navigator.storage.persist()` cuando el navegador lo permite. Un respaldo completo es exportar la biblioteca a JSON. El APK no añade sincronización: es el mismo modelo local-first.
 
 ## Formato JSON
 
@@ -130,7 +162,7 @@ El contrato público está en [`schema/open-cards.v1.schema.json`](schema/open-c
 **Importar un ejemplo**
 
 1. App → **Importar**.
-2. Elige el archivo (o pégalo).
+2. Pega el JSON y pulsa **Usar JSON**, o elige un archivo.
 3. Revisa el borrador (nombre, etiquetas, tarjetas) y confirma mazo a mazo.
 
 ## Documentación
@@ -141,6 +173,7 @@ El contrato público está en [`schema/open-cards.v1.schema.json`](schema/open-c
 | Convenciones para contribuir o usar un agente de código | [`AGENTS.md`](AGENTS.md) |
 | Validar o generar JSON compatible | [`schema/open-cards.v1.schema.json`](schema/open-cards.v1.schema.json) |
 | Ver cómo se despliega la demo | [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) |
+| Ver cómo se construye el APK | [`.github/workflows/android-apk.yml`](.github/workflows/android-apk.yml) |
 
 ## Contribuir
 

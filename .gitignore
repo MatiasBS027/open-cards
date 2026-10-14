@@ -14,6 +14,19 @@ dist-ssr
 .DS_Store
 *.tsbuildinfo
 
+# Capacitor / Android
+android/.gradle/
+android/app/build/
+android/build/
+android/captures/
+android/local.properties
+android/*.iml
+android/.idea/
+*.apk
+*.aab
+*.ap_
+*.dex
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
