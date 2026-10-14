@@ -25,10 +25,13 @@ import type { Card, Deck, StudyFilter, StudyOrder } from '../../domain/types'
 import { downloadJson, exportDeck } from '../../importExport/exportLibrary'
 import {
   deleteCard,
+  duplicateCard,
   getDeck,
   getDeckTags,
   getSessionForDeck,
   listCards,
+  listDecks,
+  moveCard,
   reorderDeckCards,
   restoreCard,
   setCardState,
@@ -42,15 +45,21 @@ import { UndoToast } from '../components/UndoToast'
 function SortableCard({
   card,
   flipped,
+  otherDecks,
   onFlip,
   onOpen,
   onDelete,
+  onDuplicate,
+  onMove,
 }: {
   card: Card
   flipped: boolean
+  otherDecks: Deck[]
   onFlip: () => void
   onOpen: () => void
   onDelete: () => void
+  onDuplicate: () => void
+  onMove: (targetDeckId: string) => void
 }) {
   const {
     attributes,
@@ -96,9 +105,33 @@ function SortableCard({
         <button type="button" className="button-quiet" onClick={onOpen}>
           Editar
         </button>
+        <button type="button" className="button-quiet" onClick={onDuplicate}>
+          Duplicar
+        </button>
         <button type="button" className="button-quiet danger" onClick={onDelete}>
           Eliminar
         </button>
+        {otherDecks.length > 0 ? (
+          <select
+            className="move-card-select"
+            aria-label="Mover a otro mazo"
+            defaultValue=""
+            onChange={(e) => {
+              const target = e.target.value
+              e.target.value = ''
+              if (target) onMove(target)
+            }}
+          >
+            <option value="" disabled>
+              Mover a…
+            </option>
+            {otherDecks.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </select>
+        ) : null}
       </div>
     </article>
   )
@@ -127,6 +160,7 @@ export function DeckPage() {
   const [editName, setEditName] = useState('')
   const [editDescription, setEditDescription] = useState('')
   const [editTags, setEditTags] = useState('')
+  const [otherDecks, setOtherDecks] = useState<Deck[]>([])
   // Mouse + Touch (not PointerSensor): avoids double-handling on touch devices
   // and lets the body button keep click-to-flip without fighting the handle.
   const sensors = useSensors(
@@ -149,6 +183,8 @@ export function DeckPage() {
     setTags(await getDeckTags(deckId))
     setCards(await listCards(deckId))
     setHasSession(Boolean(await getSessionForDeck(deckId)))
+    const all = await listDecks()
+    setOtherDecks(all.filter((x) => x.id !== deckId))
   }
 
   useEffect(() => {
@@ -376,6 +412,7 @@ export function DeckPage() {
                   key={card.id}
                   card={card}
                   flipped={Boolean(flipped[card.id])}
+                  otherDecks={otherDecks}
                   onFlip={() => {
                     setFlipped((f) => ({ ...f, [card.id]: !f[card.id] }))
                     if (card.state === 'unseen') {
@@ -384,6 +421,12 @@ export function DeckPage() {
                   }}
                   onOpen={() =>
                     navigate(`/decks/${deckId}/cards/${card.id}`)
+                  }
+                  onDuplicate={() =>
+                    void duplicateCard(card.id).then(() => reload())
+                  }
+                  onMove={(targetDeckId) =>
+                    void moveCard(card.id, targetDeckId).then(() => reload())
                   }
                   onDelete={() =>
                     void deleteCard(card.id).then((removed) => {

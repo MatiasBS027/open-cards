@@ -239,6 +239,23 @@ export async function duplicateCard(id: string): Promise<Card | undefined> {
   return createCard(source.deckId, source.front, source.back)
 }
 
+/** DUP-01: new deck + card IDs; all copies start as unseen. */
+export async function duplicateDeck(deckId: string): Promise<Deck | undefined> {
+  const source = await getDeck(deckId)
+  if (!source) return undefined
+  const tags = await getDeckTags(deckId)
+  const cards = await listCards(deckId)
+  const deck = await createDeck(
+    `${source.name} (copia)`,
+    source.description ?? '',
+  )
+  if (tags.length) await setDeckTags(deck.id, tags)
+  for (const card of cards) {
+    await createCard(deck.id, card.front, card.back)
+  }
+  return deck
+}
+
 export async function moveCard(
   cardId: string,
   targetDeckId: string,

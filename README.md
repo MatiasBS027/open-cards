@@ -32,7 +32,7 @@ Muchas apps de flashcards meten tu progreso en la nube, te empujan a una cuenta 
 
 Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y trozos de código. El contenido importado es **dato**, nunca se ejecuta.
 
-> Estado actual: núcleo usable (mazos, editor, estudio, import/export, PWA). Empaquetado Android opcional con Capacitor. La hoja de ruta del producto está en [`SPEC.md`](SPEC.md).
+> Estado actual (v0.1.1): MVP usable en Pages y APK — mazos, editor, estudio, import/export, búsqueda, aviso de respaldo, duplicar/mover, PWA, Capacitor. Detalle en [`SPEC.md`](SPEC.md) y [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Características
 
@@ -86,7 +86,14 @@ La misma app empaquetada con [Capacitor](https://capacitorjs.com/) para Android:
 - El archivo se llama `open-cards-vX.Y.Z-debug.apk` (build de depuración firmado con la keystore de debug de Android).
 - No hay cuenta ni sync: IndexedDB sigue siendo local en el dispositivo.
 
-Para publicar una release nueva: crea un tag `v*` (p. ej. `v0.1.0`) y empújalo; el workflow [Android APK](.github/workflows/android-apk.yml) construye el APK y lo adjunta a la release.
+**Cómo publicar un APK nuevo**
+
+```bash
+git tag v0.1.1          # bump semver
+git push origin v0.1.1  # dispara Android APK → GitHub Release
+```
+
+Un push a `main` actualiza solo la PWA en Pages; el APK instalado en el teléfono no cambia hasta un tag `v*` nuevo.
 
 ## Inicio rápido
 
@@ -174,6 +181,7 @@ El contrato público está en [`schema/open-cards.v1.schema.json`](schema/open-c
 | Validar o generar JSON compatible | [`schema/open-cards.v1.schema.json`](schema/open-cards.v1.schema.json) |
 | Ver cómo se despliega la demo | [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) |
 | Ver cómo se construye el APK | [`.github/workflows/android-apk.yml`](.github/workflows/android-apk.yml) |
+| Ver qué cambió por versión | [`CHANGELOG.md`](CHANGELOG.md) |
 
 ## Contribuir
 

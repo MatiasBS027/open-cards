@@ -1,9 +1,9 @@
 # Open Cards — Especificación del proyecto
 
-**Estado:** especificación v2.1 (decisiones consolidadas + arranque por núcleo usable)
+**Estado:** especificación v2.2 — MVP usable en producción (PWA + Pages + APK Capacitor), incluyendo aviso de respaldo, búsqueda/filtro y duplicar/mover.
 **Objetivo:** definir el producto, las decisiones tomadas, la arquitectura, los requisitos funcionales, las pruebas de aceptación y lo que sigue abierto, de modo que una persona o un agente de código pueda implementar el MVP sin adivinar.
 
-Documentos relacionados: `README.md`, `AGENTS.md`, `schema/open-cards.v1.schema.json`, `examples/ejemplo-biblioteca.json`.
+Documentos relacionados: `README.md`, `AGENTS.md`, `CHANGELOG.md`, `schema/open-cards.v1.schema.json`, `examples/ejemplo-biblioteca.json`.
 
 ---
 
@@ -462,12 +462,14 @@ Una tarjeta es válida si frente y reverso tienen al menos un bloque con conteni
 
 ## 20. Plan de desarrollo
 
-1. **Reorganizar docs** en la raíz (`SPEC.md`, `schema/`, `examples/`, `AGENTS.md`).
-2. **Prototipo math:** MathLive → LaTeX → KaTeX e inline `$...$` (MTH-01, TXT-*).
-3. **Dominio:** tipos, estados, orden, validación de contenido no vacío, Vitest.
-4. **Núcleo usable:** Dexie, mazos/tarjetas, editor por bloques, reordenar, estados, sesión (filtro/orden/retomar), export/import (añadir), tema.
-5. **Resto del MVP:** etiquetas/búsqueda, deshacer pulido, aviso 14 días, PWA offline, CI GitHub Pages, duplicar/mover avanzado.
-6. **Calidad y docs:** pruebas de aceptación §19, accesibilidad, mantener SPEC/AGENTS.
+1. ~~**Reorganizar docs**~~ — hecho (`SPEC.md`, `schema/`, `examples/`, `AGENTS.md`).
+2. ~~**Prototipo math**~~ — MathLive → LaTeX → KaTeX e inline `$...$`.
+3. ~~**Dominio**~~ — tipos, estados, orden, validación, Vitest.
+4. ~~**Núcleo usable**~~ — Dexie, mazos/tarjetas, editor, reordenar, estados, sesión, export/import, tema.
+5. ~~**Resto del MVP**~~ — PWA, Pages, APK, búsqueda/filtro, aviso 14 días, duplicar/mover.
+6. **Calidad y docs:** aceptar §19, accesibilidad, mantener SPEC/AGENTS/CHANGELOG.
+
+**Despliegue:** push a `main` actualiza Pages (PWA). Tag `v*` dispara el workflow Android y publica el APK en GitHub Releases. La PWA y el APK no comparten IndexedDB entre sí.
 
 Posteriores: sincronización, Docker, MCP, imágenes, historial y repetición espaciada.
 

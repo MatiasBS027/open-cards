@@ -1,10 +1,10 @@
 # AGENTS.md — Instrucciones para agentes de código (Cursor, etc.)
 
-Proyecto: **Open Cards**, app de flashcards local-first (PWA). La fuente de verdad del producto es `SPEC.md`. Si algo no está claro, **pregunta o pide decidir**; no inventes funciones fuera del alcance del MVP (§18 del SPEC).
+Proyecto: **Open Cards**, app de flashcards local-first (PWA; APK Android opcional vía Capacitor). La fuente de verdad del producto es `SPEC.md`. Si algo no está claro, **pregunta o pide decidir**; no inventes funciones fuera del alcance del MVP (§18 del SPEC).
 
 ## Stack
 
-TypeScript estricto, Vite, React, Dexie (IndexedDB), MathLive, KaTeX, CodeMirror 6, `@dnd-kit`, `vite-plugin-pwa`, Vitest, Ajv, React Router con `HashRouter`.
+TypeScript estricto, Vite, React, Dexie (IndexedDB), MathLive, KaTeX, CodeMirror 6, `@dnd-kit`, `vite-plugin-pwa`, Vitest, Ajv, React Router con `HashRouter`. Empaquetado Android opcional: Capacitor (`android/`).
 
 ## Idioma
 
@@ -59,7 +59,8 @@ TypeScript estricto, Vite, React, Dexie (IndexedDB), MathLive, KaTeX, CodeMirror
 
 ## Despliegue
 
-GitHub Pages con GitHub Actions. Ruta base con `VITE_BASE`. Usar `HashRouter`.
+- **PWA / web:** GitHub Pages con Actions. Ruta base con `VITE_BASE` (por defecto `/open-cards/` en Pages). Usar `HashRouter`.
+- **APK:** Capacitor envuelve el mismo build. El APK siempre se construye con `VITE_BASE=/` (assets en la raíz del WebView). Publicar: `git tag vX.Y.Z && git push origin vX.Y.Z` → workflow `android-apk.yml` adjunta el APK a la GitHub Release. No añade sincronización ni backend.
 
 ## Cuando falte información
 

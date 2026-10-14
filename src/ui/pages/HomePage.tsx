@@ -1,19 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UNDO_MS } from '../../config'
+import { shouldShowBackupReminder } from '../../domain/backup'
+import { deckHasAllTags, deckMatchesQuery } from '../../domain/search'
 import { computeProgress } from '../../domain/state'
+import { normalizeTagName } from '../../domain/tags'
 import type { Deck, ThemePreference } from '../../domain/types'
 import { downloadJson, exportAll } from '../../importExport/exportLibrary'
+import { ensureSettings } from '../../storage/db'
 import {
   createDeck,
   deleteDeck,
+  duplicateDeck,
   getDeckTags,
   listCards,
   listDecks,
   restoreDeck,
+  searchCards,
   setDeckTags,
 } from '../../storage/repositories'
 import { BrandMark } from '../brand/BrandMark'
+import { BackupReminder } from '../components/BackupReminder'
 import { UndoToast } from '../components/UndoToast'
 import { FadeContent } from '../motion/FadeContent'
 import { useTheme } from '../theme'
@@ -34,12 +41,37 @@ export function HomePage() {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [tagsInput, setTagsInput] = useState('')
+  const [query, setQuery] = useState('')
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [cardHits, setCardHits] = useState<
+    Awaited<ReturnType<typeof searchCards>>
+  >([])
+  const [showBackup, setShowBackup] = useState(false)
+  const [backupDismissed, setBackupDismissed] = useState(false)
   const [undo, setUndo] = useState<{
     deck: Deck
     cards: Awaited<ReturnType<typeof listCards>>
     tags: string[]
   } | null>(null)
   const { theme, setTheme } = useTheme()
+
+  const allTags = useMemo(() => {
+    const set = new Map<string, string>()
+    for (const tags of Object.values(deckTags)) {
+      for (const tag of tags) {
+        set.set(normalizeTagName(tag), tag)
+      }
+    }
+    return [...set.values()].sort((a, b) => a.localeCompare(b, 'es'))
+  }, [deckTags])
+
+  const filteredDecks = useMemo(() => {
+    return decks.filter(
+      (deck) =>
+        deckMatchesQuery(deck, query) &&
+        deckHasAllTags(deckTags[deck.id] ?? [], selectedTags),
+    )
+  }, [decks, deckTags, query, selectedTags])
 
   const reload = async () => {
     const list = await listDecks()
@@ -57,8 +89,14 @@ export function HomePage() {
     setDeckTagsMap(tagMap)
   }
 
+  const refreshBackup = async () => {
+    const settings = await ensureSettings()
+    setShowBackup(shouldShowBackupReminder(settings))
+  }
+
   useEffect(() => {
     void reload()
+    void refreshBackup()
   }, [])
 
   useEffect(() => {
@@ -66,6 +104,18 @@ export function HomePage() {
     const t = window.setTimeout(() => setUndo(null), UNDO_MS)
     return () => window.clearTimeout(t)
   }, [undo])
+
+  useEffect(() => {
+    const q = query.trim()
+    if (!q) {
+      setCardHits([])
+      return
+    }
+    const handle = window.setTimeout(() => {
+      void searchCards(q).then(setCardHits)
+    }, 200)
+    return () => window.clearTimeout(handle)
+  }, [query])
 
   const resetCreateForm = () => {
     setName('')
@@ -83,6 +133,7 @@ export function HomePage() {
     }
     resetCreateForm()
     await reload()
+    await refreshBackup()
     navigate(`/decks/${deck.id}`)
   }
 
@@ -96,6 +147,23 @@ export function HomePage() {
     const snapshot = await deleteDeck(deck.id)
     if (snapshot) setUndo(snapshot)
     await reload()
+    await refreshBackup()
+  }
+
+  const onDuplicate = async (deck: Deck) => {
+    const copy = await duplicateDeck(deck.id)
+    await reload()
+    await refreshBackup()
+    if (copy) navigate(`/decks/${copy.id}`)
+  }
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags((prev) => {
+      const key = normalizeTagName(tag)
+      const has = prev.some((t) => normalizeTagName(t) === key)
+      if (has) return prev.filter((t) => normalizeTagName(t) !== key)
+      return [...prev, tag]
+    })
   }
 
   return (
@@ -124,9 +192,11 @@ export function HomePage() {
             type="button"
             onClick={() =>
               void exportAll()
-                .then((data) =>
-                  downloadJson('open-cards-biblioteca.json', data),
-                )
+                .then((data) => {
+                  downloadJson('open-cards-biblioteca.json', data)
+                  setBackupDismissed(false)
+                  void refreshBackup()
+                })
                 .catch((err: Error) => alert(err.message))
             }
           >
@@ -137,6 +207,67 @@ export function HomePage() {
           </Link>
         </div>
       </header>
+
+      {showBackup && !backupDismissed ? (
+        <BackupReminder
+          onDismiss={() => setBackupDismissed(true)}
+          onExported={() => {
+            setBackupDismissed(false)
+            void refreshBackup()
+          }}
+        />
+      ) : null}
+
+      <section className="library-toolbar" aria-label="Buscar y filtrar">
+        <label className="field">
+          <span>Buscar</span>
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Mazos o texto de tarjetas…"
+            aria-label="Buscar mazos y tarjetas"
+          />
+        </label>
+        {allTags.length > 0 ? (
+          <div className="tag-filter-row" role="group" aria-label="Filtrar por etiquetas">
+            {allTags.map((tag) => {
+              const active = selectedTags.some(
+                (t) => normalizeTagName(t) === normalizeTagName(tag),
+              )
+              return (
+                <button
+                  key={tag}
+                  type="button"
+                  className={`tag-filter-chip${active ? ' is-active' : ''}`}
+                  aria-pressed={active}
+                  onClick={() => toggleTag(tag)}
+                >
+                  {tag}
+                </button>
+              )
+            })}
+          </div>
+        ) : null}
+      </section>
+
+      {cardHits.length > 0 ? (
+        <section className="card-search-results" aria-label="Tarjetas encontradas">
+          <h2 className="muted" style={{ margin: 0, fontSize: '0.95rem' }}>
+            Tarjetas ({cardHits.length})
+          </h2>
+          {cardHits.slice(0, 20).map(({ card, deckName }) => (
+            <Link
+              key={card.id}
+              className="card-search-hit"
+              to={`/decks/${card.deckId}/cards/${card.id}`}
+            >
+              <strong>{deckName}</strong>
+              <span className="muted"> · abrir tarjeta</span>
+            </Link>
+          ))}
+        </section>
+      ) : null}
 
       {creating ? (
         <section className="panel stack">
@@ -203,7 +334,11 @@ export function HomePage() {
           </p>
         ) : null}
 
-        {decks.map((deck, index) => (
+        {decks.length > 0 && filteredDecks.length === 0 ? (
+          <p className="muted">Ningún mazo coincide con la búsqueda o etiquetas.</p>
+        ) : null}
+
+        {filteredDecks.map((deck, index) => (
           <FadeContent key={deck.id} delay={Math.min(index, 8) * 0.04} y={8}>
             <article className="deck-card">
               <div className="row between">
@@ -225,13 +360,22 @@ export function HomePage() {
                   ) : null}
                   <p className="muted">{progress[deck.id]}</p>
                 </div>
-                <button
-                  type="button"
-                  className="danger"
-                  onClick={() => void onDelete(deck)}
-                >
-                  Eliminar
-                </button>
+                <div className="deck-card-actions">
+                  <button
+                    type="button"
+                    className="button-quiet"
+                    onClick={() => void onDuplicate(deck)}
+                  >
+                    Duplicar
+                  </button>
+                  <button
+                    type="button"
+                    className="danger"
+                    onClick={() => void onDelete(deck)}
+                  >
+                    Eliminar
+                  </button>
+                </div>
               </div>
             </article>
           </FadeContent>

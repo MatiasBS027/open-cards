@@ -608,6 +608,7 @@ textarea {
 
 .flash-card-side-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 0.45rem;
   padding-top: 0.35rem;
@@ -823,6 +824,88 @@ textarea {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.55rem;
+}
+
+.backup-banner {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+}
+
+.backup-banner-text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.library-toolbar {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.library-toolbar input[type='search'] {
+  width: 100%;
+}
+
+.tag-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag-filter-chip {
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.tag-filter-chip.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-elev));
+  color: var(--accent);
+}
+
+.card-search-results {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.card-search-hit {
+  display: block;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-search-hit:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.deck-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: stretch;
+}
+
+.move-card-select {
+  max-width: 100%;
+  font-size: 0.8rem;
+  padding: 0.35rem 1.8rem 0.35rem 0.55rem;
 }
 
 /* —— Import —— */
