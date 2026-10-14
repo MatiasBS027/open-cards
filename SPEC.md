@@ -127,7 +127,7 @@ Regla de dependencias: `ui` → `storage` / `importExport` → `domain`. `domain
 
 ### Qué es Vitest
 
-Vitest es el ejecutor de pruebas automáticas que se integra con Vite. Se escriben archivos `*.test.ts` con casos como «si una tarjeta `understood` se edita, queda `unseen`» y se ejecutan con `npm test`. Se usa sobre todo para el dominio (reglas de estado, orden, importación), porque son pruebas rápidas, sin navegador, y evitan romper reglas al cambiar código.
+Vitest es el ejecutor de pruebas automáticas que se integra con Vite. Se escriben archivos `*.test.ts` con casos como «si una tarjeta `understood` se edita, queda `unseen`» y se ejecutan con `pnpm test`. Se usa sobre todo para el dominio (reglas de estado, orden, importación), porque son pruebas rápidas, sin navegador, y evitan romper reglas al cambiar código.
 
 ## 6. Modelo de estudio de las tarjetas
 
@@ -340,7 +340,7 @@ Una tarjeta es válida si frente y reverso tienen al menos un bloque con conteni
 - El contenido de código nunca se evalúa ni se ejecuta.
 - No hay peticiones de red salvo la descarga de la propia app; ningún contenido importado dispara red.
 - Validación estricta del JSON antes de crear el borrador; límites de tamaño y cantidad.
-- Dependencias fijadas por `package-lock.json`.
+- Dependencias fijadas por `pnpm-lock.yaml` (gestor: **pnpm**, no npm).
 
 ## 18. Alcance del MVP
 
@@ -469,7 +469,7 @@ Una tarjeta es válida si frente y reverso tienen al menos un bloque con conteni
 5. ~~**Resto del MVP**~~ — PWA, Pages, APK, búsqueda/filtro, aviso 14 días, duplicar/mover.
 6. **Calidad y docs:** aceptar §19, accesibilidad, mantener SPEC/AGENTS/CHANGELOG.
 
-**Despliegue:** push a `main` actualiza Pages (PWA). Tag `v*` dispara el workflow Android y publica el APK en GitHub Releases. La PWA y el APK no comparten IndexedDB entre sí.
+**Despliegue:** el camino principal en teléfono es el **APK** (Capacitor). Tag `v*` → workflow Android → GitHub Release. Push a `main` actualiza la demo en GitHub Pages (útil en PC / compartir enlace). Pages y APK no comparten IndexedDB; sin sync en la nube, el puente de datos es importar/exportar JSON.
 
 Posteriores: sincronización, Docker, MCP, imágenes, historial y repetición espaciada.
 

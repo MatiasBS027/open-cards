@@ -9,7 +9,7 @@ All notable changes to Open Cards are documented here.
 - Backup reminder after 14 days with unsaved export changes (EXP-03).
 - Library search for decks and cards; tag filter (AND) on the home page (SRC-*).
 - Duplicate deck; duplicate / move card between decks (DUP/MOV).
-- Docs sync: SPEC v2.2, AGENTS Capacitor notes, CHANGELOG.
+- Docs sync: SPEC v2.2, AGENTS Capacitor notes, CHANGELOG; APK-first wording; pnpm-only commands (no npm / package-lock).
 
 ## [v0.1.0](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.0) — 2026-10-14
 

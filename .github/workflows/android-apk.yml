@@ -48,7 +48,7 @@ jobs:
         run: |
           pnpm exec tsc -b
           pnpm exec vite build
-          npx cap sync android
+          pnpm exec cap sync android
 
       - name: Assemble debug APK
         working-directory: android

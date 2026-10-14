@@ -32,7 +32,7 @@ Muchas apps de flashcards meten tu progreso en la nube, te empujan a una cuenta 
 
 Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y trozos de código. El contenido importado es **dato**, nunca se ejecuta.
 
-> Estado actual (v0.1.1): MVP usable en Pages y APK — mazos, editor, estudio, import/export, búsqueda, aviso de respaldo, duplicar/mover, PWA, Capacitor. Detalle en [`SPEC.md`](SPEC.md) y [`CHANGELOG.md`](CHANGELOG.md).
+> Estado actual (v0.1.1): MVP usable. En Android preferimos el **APK**; Pages queda como demo web en PC. Sin cuentas ni sync: el puente entre dispositivos es importar/exportar JSON. Detalle en [`SPEC.md`](SPEC.md) y [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Características
 
@@ -61,22 +61,19 @@ Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y
 
 **App**
 
-- PWA instalable; funciona offline.
-- APK Android opcional (Capacitor) — misma app local-first, sin sincronización en la nube.
+- **APK Android** (Capacitor) — camino principal en el teléfono; misma app local-first.
+- Demo web en GitHub Pages (PC / compartir enlace); también funciona offline como PWA si alguien la instala desde el navegador.
 - Tema claro / oscuro / sistema.
 - Interfaz en español; código y esquema en inglés.
+- Sin cuentas ni sincronización en la nube: entre PC y teléfono usas exportar/importar JSON.
 
-## Probarlo ya (PWA)
+## Probarlo ya
 
-No hace falta clonar el repo:
+**En el teléfono (recomendado):** descarga el [APK](#descargar-apk) e instálalo.
 
-1. Abre la [demo en GitHub Pages](https://matiasbs027.github.io/open-cards/).
-2. En Android, usa **Chrome** → menú → **Instalar aplicación** / **Añadir a la pantalla de inicio**.
-3. Opcional: importa un ejemplo desde [`examples/`](examples/) (p. ej. [`probabilidad-biblioteca.json`](examples/probabilidad-biblioteca.json)).
+**En el PC / demo:** abre la [demo en GitHub Pages](https://matiasbs027.github.io/open-cards/). Opcional: importa un ejemplo desde [`examples/`](examples/).
 
-**Nota sobre Brave (Android):** Brave suele crear un acceso directo del navegador en lugar de una PWA instalable de verdad. Para instalar la app como PWA, usa Chrome (o Edge). Si prefieres un instalador nativo, descarga el [APK](#descargar-apk).
-
-Todo se guarda en **tu** navegador o dispositivo. Si borras los datos del sitio o desinstalas la app, se pierden: exporta respaldos con regularidad.
+Todo se guarda en **tu** dispositivo. Si desinstalas o borras datos del sitio, se pierden: exporta respaldos con regularidad. No hace falta sync: exportas en un lado e importas en el otro.
 
 ## Descargar APK
 
@@ -93,7 +90,7 @@ git tag v0.1.1          # bump semver
 git push origin v0.1.1  # dispara Android APK → GitHub Release
 ```
 
-Un push a `main` actualiza solo la PWA en Pages; el APK instalado en el teléfono no cambia hasta un tag `v*` nuevo.
+Un push a `main` actualiza la demo en Pages. El APK del teléfono solo cambia con un tag `v*` nuevo (y reinstalar/actualizar desde Releases).
 
 ## Inicio rápido
 
