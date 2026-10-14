@@ -40,6 +40,7 @@ export function ImportPage() {
   const [multiMode, setMultiMode] = useState(false)
   const [previewCard, setPreviewCard] = useState(0)
   const [showPreview, setShowPreview] = useState(false)
+  const [pasteText, setPasteText] = useState('')
 
   const openDraft = async (draft: ImportDeckDraft, index: number | null) => {
     const decks = await listDecks()
@@ -118,24 +119,37 @@ export function ImportPage() {
           </header>
           <section className="panel import-source stack">
             <p className="muted">
-              Pega JSON o elige un archivo. Cada mazo se revisa y confirma por
-              separado. Siempre se añaden mazos nuevos.
+              Pega JSON y pulsa «Usar JSON», o elige un archivo. Cada mazo se
+              revisa y confirma por separado. Siempre se añaden mazos nuevos.
             </p>
             <label className="field">
               <span>JSON</span>
               <textarea
                 rows={10}
+                value={pasteText}
                 placeholder='{ "format": "open-cards", ... }'
-                onBlur={(e) => {
-                  if (e.target.value.trim()) {
-                    void loadText(
-                      e.target.value,
-                      new TextEncoder().encode(e.target.value).length,
-                    )
-                  }
+                onChange={(e) => {
+                  setPasteText(e.target.value)
+                  if (error) setError('')
                 }}
               />
             </label>
+            <div className="row gap wrap">
+              <button
+                type="button"
+                className="button"
+                disabled={!pasteText.trim()}
+                onClick={() => {
+                  const text = pasteText
+                  void loadText(
+                    text,
+                    new TextEncoder().encode(text).length,
+                  )
+                }}
+              >
+                Usar JSON
+              </button>
+            </div>
             <div className="file-picker">
               <input
                 ref={fileRef}

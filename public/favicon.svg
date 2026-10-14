@@ -1,8 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Open Cards">
-  <rect x="6" y="14" width="28" height="38" rx="5" transform="rotate(-14 20 33)" fill="#eac54f"/>
-  <rect x="18" y="8" width="28" height="38" rx="5" fill="#cf222e"/>
-  <rect x="30" y="14" width="28" height="38" rx="5" transform="rotate(14 44 33)" fill="#2da44e"/>
-  <rect x="18" y="12" width="28" height="40" rx="5" fill="#0969da"/>
-  <rect x="24" y="24" width="16" height="4" rx="2" fill="#d0d7de"/>
-  <rect x="24" y="32" width="12" height="4" rx="2" fill="#d0d7de"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Open Cards" fill="none">
+  <rect
+    x="6"
+    y="14"
+    width="28"
+    height="38"
+    rx="6"
+    transform="rotate(-18 20 33)"
+    fill="#ffffff"
+    stroke="#656d76"
+    stroke-width="2.25"
+    stroke-linejoin="round"
+  />
+  <rect
+    x="30"
+    y="14"
+    width="28"
+    height="38"
+    rx="6"
+    transform="rotate(18 44 33)"
+    fill="#ffffff"
+    stroke="#656d76"
+    stroke-width="2.25"
+    stroke-linejoin="round"
+  />
+  <rect
+    x="18"
+    y="12"
+    width="28"
+    height="40"
+    rx="6"
+    fill="#ffffff"
+    stroke="#656d76"
+    stroke-width="2.25"
+    stroke-linejoin="round"
+  />
+  <rect x="24" y="24" width="16" height="4" rx="2" fill="#afb8c1" />
+  <rect x="24" y="32" width="11" height="4" rx="2" fill="#afb8c1" />
 </svg>

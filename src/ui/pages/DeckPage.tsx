@@ -18,6 +18,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { UNDO_MS } from '../../config'
+import { reorderCards } from '../../domain/order'
 import { stateLabel } from '../../domain/session'
 import { computeProgress } from '../../domain/state'
 import type { Card, Deck, StudyFilter, StudyOrder } from '../../domain/types'
@@ -162,10 +163,18 @@ export function DeckPage() {
 
   const progress = computeProgress(cards.map((c) => c.state))
 
-  const onDragEnd = async (event: DragEndEvent) => {
+  const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (!over || active.id === over.id) return
-    setCards(await reorderDeckCards(deckId, String(active.id), String(over.id)))
+    const activeId = String(active.id)
+    const overId = String(over.id)
+    // Optimistic reorder so @dnd-kit does not snap back to the old layout
+    // while IndexedDB persists the new `position` values (SPEC: DB order).
+    const next = reorderCards(cards, activeId, overId)
+    setCards(next)
+    void reorderDeckCards(deckId, activeId, overId).then(setCards).catch(() => {
+      void reload()
+    })
   }
 
   const beginStudy = async (forceNew: boolean) => {
@@ -228,9 +237,11 @@ export function DeckPage() {
           </p>
         </div>
         <div className="page-header-actions">
-          <button type="button" className="ghost" onClick={openMetaEditor}>
-            Editar mazo
-          </button>
+          {!editingMeta ? (
+            <button type="button" className="ghost" onClick={openMetaEditor}>
+              Editar mazo
+            </button>
+          ) : null}
           <Link className="button" to={`/decks/${deckId}/cards/new`}>
             + Tarjeta
           </Link>
@@ -287,64 +298,64 @@ export function DeckPage() {
             </button>
           </div>
         </section>
-      ) : null}
-
-      <section className="panel stack">
-        <h2>Estudiar</h2>
-        {hasSession ? (
-          <div className="row gap wrap">
-            <button type="button" onClick={() => void beginStudy(false)}>
-              Continuar sesión
-            </button>
-            <button
-              type="button"
-              className="ghost"
-              onClick={() => void beginStudy(true)}
-            >
-              Empezar de nuevo
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="study-controls">
-              <label>
-                Filtro
-                <select
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value as StudyFilter)}
-                >
-                  <option value="all">Todas ({progress.total})</option>
-                  <option value="unseen">No vistas ({progress.unseen})</option>
-                  <option value="needs_review">
-                    Para repasar ({progress.needs_review})
-                  </option>
-                </select>
-              </label>
-              <label>
-                Orden
-                <select
-                  value={order}
-                  onChange={(e) => setOrder(e.target.value as StudyOrder)}
-                >
-                  <option value="sequential">Secuencial</option>
-                  <option value="shuffled">Aleatorio</option>
-                </select>
-              </label>
-              <button type="button" onClick={() => void beginStudy(true)}>
-                Iniciar
+      ) : (
+        <section className="panel stack">
+          <h2>Estudiar</h2>
+          {hasSession ? (
+            <div className="row gap wrap">
+              <button type="button" onClick={() => void beginStudy(false)}>
+                Continuar sesión
+              </button>
+              <button
+                type="button"
+                className="ghost"
+                onClick={() => void beginStudy(true)}
+              >
+                Empezar de nuevo
               </button>
             </div>
-            {message ? <p className="math-error">{message}</p> : null}
-          </>
-        )}
-      </section>
+          ) : (
+            <>
+              <div className="study-controls">
+                <label>
+                  Filtro
+                  <select
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value as StudyFilter)}
+                  >
+                    <option value="all">Todas ({progress.total})</option>
+                    <option value="unseen">No vistas ({progress.unseen})</option>
+                    <option value="needs_review">
+                      Para repasar ({progress.needs_review})
+                    </option>
+                  </select>
+                </label>
+                <label>
+                  Orden
+                  <select
+                    value={order}
+                    onChange={(e) => setOrder(e.target.value as StudyOrder)}
+                  >
+                    <option value="sequential">Secuencial</option>
+                    <option value="shuffled">Aleatorio</option>
+                  </select>
+                </label>
+                <button type="button" onClick={() => void beginStudy(true)}>
+                  Iniciar
+                </button>
+              </div>
+              {message ? <p className="math-error">{message}</p> : null}
+            </>
+          )}
+        </section>
+      )}
 
       <section className="section-gap">
         <h2>Tarjetas ({cards.length})</h2>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
-          onDragEnd={(e) => void onDragEnd(e)}
+          onDragEnd={onDragEnd}
         >
           <SortableContext
             items={cards.map((c) => c.id)}

@@ -1,8 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Open Cards">
-  <rect x="16" y="30" width="54" height="74" rx="12" transform="rotate(-18 43 67)" fill="#eac54f"/>
-  <rect x="37" y="18" width="54" height="74" rx="12" fill="#cf222e"/>
-  <rect x="58" y="30" width="54" height="74" rx="12" transform="rotate(18 85 67)" fill="#2da44e"/>
-  <rect x="37" y="26" width="54" height="78" rx="12" fill="#0969da"/>
-  <rect x="48" y="48" width="32" height="8" rx="4" fill="#d8dee4"/>
-  <rect x="48" y="64" width="24" height="8" rx="4" fill="#d8dee4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Open Cards" fill="none">
+  <!-- Fanned flashcard stack: white fills, darker gray strokes (#656d76) -->
+  <rect
+    x="14"
+    y="28"
+    width="54"
+    height="74"
+    rx="12"
+    transform="rotate(-22 41 65)"
+    fill="#ffffff"
+    stroke="#656d76"
+    stroke-width="3.5"
+    stroke-linejoin="round"
+  />
+  <rect
+    x="60"
+    y="28"
+    width="54"
+    height="74"
+    rx="12"
+    transform="rotate(22 87 65)"
+    fill="#ffffff"
+    stroke="#656d76"
+    stroke-width="3.5"
+    stroke-linejoin="round"
+  />
+  <rect
+    x="37"
+    y="24"
+    width="54"
+    height="78"
+    rx="12"
+    fill="#ffffff"
+    stroke="#656d76"
+    stroke-width="3.5"
+    stroke-linejoin="round"
+  />
+  <!-- Asymmetric content pills on front card -->
+  <rect x="48" y="48" width="32" height="8" rx="4" fill="#afb8c1" />
+  <rect x="48" y="64" width="22" height="8" rx="4" fill="#afb8c1" />
 </svg>

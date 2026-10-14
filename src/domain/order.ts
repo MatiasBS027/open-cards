@@ -4,11 +4,17 @@ export function sortByPosition(cards: Card[]): Card[] {
   return [...cards].sort((a, b) => a.position - b.position)
 }
 
-export function normalizePositions(cards: Card[]): Card[] {
-  return sortByPosition(cards).map((card, index) => ({
+/** Reindex `position` to 0..n-1 in the given array order (no re-sort). */
+export function assignPositions(cards: Card[]): Card[] {
+  return cards.map((card, index) => ({
     ...card,
     position: index,
   }))
+}
+
+/** Sort by current `position`, then reindex to 0..n-1. */
+export function normalizePositions(cards: Card[]): Card[] {
+  return assignPositions(sortByPosition(cards))
 }
 
 export function reorderCards(
@@ -23,7 +29,9 @@ export function reorderCards(
   const next = [...sorted]
   const [moved] = next.splice(from, 1)
   next.splice(to, 0, moved)
-  return normalizePositions(next)
+  // Must not call normalizePositions here: it would re-sort by the old
+  // position values and undo the splice order (DnD snap-back).
+  return assignPositions(next)
 }
 
 export function nextPosition(cards: Card[]): number {
