@@ -13,7 +13,9 @@ import {
   restoreDeck,
   setDeckTags,
 } from '../../storage/repositories'
+import { BrandMark } from '../brand/BrandMark'
 import { UndoToast } from '../components/UndoToast'
+import { FadeContent } from '../motion/FadeContent'
 import { useTheme } from '../theme'
 
 function parseTagsInput(value: string): string[] {
@@ -100,7 +102,9 @@ export function HomePage() {
     <div className="page">
       <header className="page-header">
         <div className="page-header-main">
-          <h1>Open Cards</h1>
+          <h1 className="brand-heading">
+            <BrandMark to={null} animated />
+          </h1>
         </div>
         <div className="page-header-actions">
           <select
@@ -199,36 +203,38 @@ export function HomePage() {
           </p>
         ) : null}
 
-        {decks.map((deck) => (
-          <article key={deck.id} className="deck-card">
-            <div className="row between">
-              <div>
-                <h2>
-                  <Link to={`/decks/${deck.id}`}>{deck.name}</Link>
-                </h2>
-                {deck.description ? (
-                  <p className="muted">{deck.description}</p>
-                ) : null}
-                {(deckTags[deck.id] ?? []).length > 0 ? (
-                  <div className="tag-row">
-                    {deckTags[deck.id]!.map((tag) => (
-                      <span key={tag} className="tag-chip">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-                <p className="muted">{progress[deck.id]}</p>
+        {decks.map((deck, index) => (
+          <FadeContent key={deck.id} delay={Math.min(index, 8) * 0.04} y={8}>
+            <article className="deck-card">
+              <div className="row between">
+                <div>
+                  <h2>
+                    <Link to={`/decks/${deck.id}`}>{deck.name}</Link>
+                  </h2>
+                  {deck.description ? (
+                    <p className="muted">{deck.description}</p>
+                  ) : null}
+                  {(deckTags[deck.id] ?? []).length > 0 ? (
+                    <div className="tag-row">
+                      {deckTags[deck.id]!.map((tag) => (
+                        <span key={tag} className="tag-chip">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                  <p className="muted">{progress[deck.id]}</p>
+                </div>
+                <button
+                  type="button"
+                  className="danger"
+                  onClick={() => void onDelete(deck)}
+                >
+                  Eliminar
+                </button>
               </div>
-              <button
-                type="button"
-                className="danger"
-                onClick={() => void onDelete(deck)}
-              >
-                Eliminar
-              </button>
-            </div>
-          </article>
+            </article>
+          </FadeContent>
         ))}
       </section>
 

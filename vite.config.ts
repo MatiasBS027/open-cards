@@ -22,8 +22,8 @@ export default defineConfig({
         description:
           'Flashcards local-first con LaTeX y codigo. Funciona sin conexion.',
         lang: 'es',
-        theme_color: '#1c2a24',
-        background_color: '#f3efe6',
+        theme_color: '#f6f8fa',
+        background_color: '#f6f8fa',
         display: 'standalone',
         orientation: 'any',
         // Relative to `base` so the PWA scope matches GitHub Pages.

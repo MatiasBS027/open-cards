@@ -147,62 +147,64 @@ export function StudyPage() {
             ‹
           </button>
 
-          <button
-            type="button"
-            className={`study-flash${flipped ? ' is-flipped' : ''}`}
-            onClick={() => {
-              if (swiped.current) {
+          <div className="study-flash-scene">
+            <button
+              type="button"
+              className={`study-flash${flipped ? ' is-flipped' : ''}`}
+              onClick={() => {
+                if (swiped.current) {
+                  swiped.current = false
+                  return
+                }
+                flip()
+              }}
+              onTouchStart={(e) => {
+                touchX.current = e.changedTouches[0]?.clientX ?? null
                 swiped.current = false
-                return
-              }
-              flip()
-            }}
-            onTouchStart={(e) => {
-              touchX.current = e.changedTouches[0]?.clientX ?? null
-              swiped.current = false
-            }}
-            onTouchEnd={(e) => {
-              if (touchX.current == null) return
-              const x = e.changedTouches[0]?.clientX ?? touchX.current
-              const dx = x - touchX.current
-              if (dx > 80) {
-                swiped.current = true
-                void classify('understood')
-              } else if (dx < -80) {
-                swiped.current = true
-                void classify('needs_review')
-              }
-              touchX.current = null
-            }}
-          >
-            {flipped ? (
-              <div className="study-flash-split">
-                <div className="study-flash-pane">
-                  <span className="study-face-label">ANVERSO</span>
+              }}
+              onTouchEnd={(e) => {
+                if (touchX.current == null) return
+                const x = e.changedTouches[0]?.clientX ?? touchX.current
+                const dx = x - touchX.current
+                if (dx > 80) {
+                  swiped.current = true
+                  void classify('understood')
+                } else if (dx < -80) {
+                  swiped.current = true
+                  void classify('needs_review')
+                }
+                touchX.current = null
+              }}
+            >
+              {flipped ? (
+                <div className="study-flash-split" key="flipped">
+                  <div className="study-flash-pane">
+                    <span className="study-face-label">Anverso</span>
+                    <div className="study-flash-content">
+                      <BlockRenderer blocks={card.front} />
+                    </div>
+                  </div>
+                  <div className="study-flash-divider" aria-hidden />
+                  <div className="study-flash-pane">
+                    <span className="study-face-label">Reverso</span>
+                    <div className="study-flash-content">
+                      <BlockRenderer blocks={card.back} />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="study-flash-front" key="front">
+                  <span className="study-face-label">Anverso</span>
                   <div className="study-flash-content">
                     <BlockRenderer blocks={card.front} />
                   </div>
+                  <span className="study-flash-hint">
+                    Pulsa la tarjeta para revelar la respuesta
+                  </span>
                 </div>
-                <div className="study-flash-divider" aria-hidden />
-                <div className="study-flash-pane">
-                  <span className="study-face-label">REVERSO</span>
-                  <div className="study-flash-content">
-                    <BlockRenderer blocks={card.back} />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <>
-                <span className="study-face-label">ANVERSO</span>
-                <div className="study-flash-content">
-                  <BlockRenderer blocks={card.front} />
-                </div>
-                <span className="study-flash-hint">
-                  Pulsa la tarjeta para revelar la respuesta
-                </span>
-              </>
-            )}
-          </button>
+              )}
+            </button>
+          </div>
 
           <button
             type="button"

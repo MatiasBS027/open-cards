@@ -206,7 +206,9 @@ export function DeckPage() {
     <div className="page">
       <header className="page-header">
         <div className="page-header-main">
-          <Link to="/">← Mazos</Link>
+          <Link className="muted" to="/">
+            ← Mazos
+          </Link>
           <h1>{deck.name}</h1>
           {deck.description ? (
             <p className="muted">{deck.description}</p>
