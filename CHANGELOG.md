@@ -7,6 +7,7 @@ All notable changes to Open Cards are documented here.
 ### Fixed
 
 - Deck card grid: preview-only by default (no overlapping Editar/Duplicar/Eliminar). **Editar tarjetas** toggles the manage/reorder chrome.
+- Release signing Gradle config (`keyAlias` Groovy clash) so the signed APK workflow can finish.
 
 ### Changed
 

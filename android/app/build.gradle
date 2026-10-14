@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
 
-def keystorePath = System.getenv("OPEN_CARDS_KEYSTORE")
-def keystorePassword = System.getenv("OPEN_CARDS_KEYSTORE_PASSWORD")
-def keyAlias = System.getenv("OPEN_CARDS_KEY_ALIAS")
-def keyPassword = System.getenv("OPEN_CARDS_KEY_PASSWORD")
+// Use distinct names: Groovy treats `keyAlias keyAlias` as a method call on a String.
+def ocKeystorePath = System.getenv("OPEN_CARDS_KEYSTORE")
+def ocKeystorePassword = System.getenv("OPEN_CARDS_KEYSTORE_PASSWORD")
+def ocKeyAlias = System.getenv("OPEN_CARDS_KEY_ALIAS")
+def ocKeyPassword = System.getenv("OPEN_CARDS_KEY_PASSWORD")
 def hasReleaseSigning =
-    keystorePath != null &&
-    !keystorePath.isEmpty() &&
-    keystorePassword != null &&
-    keyAlias != null &&
-    keyPassword != null
+    ocKeystorePath != null &&
+    !ocKeystorePath.isEmpty() &&
+    ocKeystorePassword != null &&
+    ocKeyAlias != null &&
+    ocKeyPassword != null
 
 def versionNameFromEnv = System.getenv("OPEN_CARDS_VERSION_NAME")
 def versionCodeFromEnv = System.getenv("OPEN_CARDS_VERSION_CODE")
@@ -33,10 +34,10 @@ android {
     signingConfigs {
         release {
             if (hasReleaseSigning) {
-                storeFile file(keystorePath)
-                storePassword keystorePassword
-                keyAlias keyAlias
-                keyPassword keyPassword
+                storeFile file(ocKeystorePath)
+                storePassword ocKeystorePassword
+                keyAlias ocKeyAlias
+                keyPassword ocKeyPassword
             }
         }
     }
