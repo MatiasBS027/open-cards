@@ -33,13 +33,23 @@ export const db = new OpenCardsDB()
 
 export async function ensureSettings(): Promise<Settings> {
   const existing = await db.settings.get('app')
-  if (existing) return existing
+  if (existing) {
+    const normalized = {
+      ...existing,
+      notifications: existing.notifications ?? [],
+    }
+    if (!existing.notifications) {
+      await db.settings.put(normalized)
+    }
+    return normalized
+  }
   const defaults: Settings = {
     id: 'app',
     theme: 'system',
     lastBackupAt: null,
     hasLocalChangesSinceBackup: false,
     storagePersistAsked: false,
+    notifications: [],
   }
   await db.settings.put(defaults)
   return defaults

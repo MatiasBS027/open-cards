@@ -5,8 +5,7 @@ import { shouldShowBackupReminder } from '../../domain/backup'
 import { deckHasAllTags, deckMatchesQuery } from '../../domain/search'
 import { computeProgress } from '../../domain/state'
 import { normalizeTagName } from '../../domain/tags'
-import type { Deck, ThemePreference } from '../../domain/types'
-import { downloadJson, exportAll } from '../../importExport/exportLibrary'
+import type { Deck } from '../../domain/types'
 import { ensureSettings } from '../../storage/db'
 import {
   createDeck,
@@ -19,11 +18,10 @@ import {
   searchCards,
   setDeckTags,
 } from '../../storage/repositories'
-import { BrandMark } from '../brand/BrandMark'
 import { BackupReminder } from '../components/BackupReminder'
+import { HomeChrome } from '../components/HomeChrome'
 import { UndoToast } from '../components/UndoToast'
 import { FadeContent } from '../motion/FadeContent'
-import { useTheme } from '../theme'
 
 function parseTagsInput(value: string): string[] {
   return value
@@ -53,7 +51,6 @@ export function HomePage() {
     cards: Awaited<ReturnType<typeof listCards>>
     tags: string[]
   } | null>(null)
-  const { theme, setTheme } = useTheme()
 
   const allTags = useMemo(() => {
     const set = new Map<string, string>()
@@ -168,45 +165,7 @@ export function HomePage() {
 
   return (
     <div className="page">
-      <header className="page-header">
-        <div className="page-header-main">
-          <h1 className="brand-heading">
-            <BrandMark to={null} animated />
-          </h1>
-        </div>
-        <div className="page-header-actions">
-          <select
-            className="toolbar-select"
-            aria-label="Tema"
-            value={theme}
-            onChange={(e) => void setTheme(e.target.value as ThemePreference)}
-          >
-            <option value="system">Sistema</option>
-            <option value="light">Claro</option>
-            <option value="dark">Oscuro</option>
-          </select>
-          <Link className="button" to="/import">
-            Importar
-          </Link>
-          <button
-            type="button"
-            onClick={() =>
-              void exportAll()
-                .then((data) => {
-                  downloadJson('open-cards-biblioteca.json', data)
-                  setBackupDismissed(false)
-                  void refreshBackup()
-                })
-                .catch((err: Error) => alert(err.message))
-            }
-          >
-            Exportar todo
-          </button>
-          <Link className="button ghost" to="/math-lab">
-            Math lab
-          </Link>
-        </div>
-      </header>
+      <HomeChrome />
 
       {showBackup && !backupDismissed ? (
         <BackupReminder

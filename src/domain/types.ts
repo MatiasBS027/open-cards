@@ -51,12 +51,22 @@ export interface StudySession {
   updatedAt: string
 }
 
+export interface AppNotification {
+  id: string
+  title: string
+  body: string
+  createdAt: string
+  read: boolean
+  kind: 'backup' | 'info'
+}
+
 export interface Settings {
   id: 'app'
   theme: ThemePreference
   lastBackupAt: string | null
   hasLocalChangesSinceBackup: boolean
   storagePersistAsked: boolean
+  notifications: AppNotification[]
 }
 
 export interface DeckProgress {

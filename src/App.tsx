@@ -6,7 +6,8 @@ import { CardEditPage } from './ui/pages/CardEditPage'
 import { DeckPage } from './ui/pages/DeckPage'
 import { HomePage } from './ui/pages/HomePage'
 import { ImportPage } from './ui/pages/ImportPage'
-import { MathLabPage } from './ui/pages/MathLabPage'
+import { NotificationsPage } from './ui/pages/NotificationsPage'
+import { SettingsPage } from './ui/pages/SettingsPage'
 import { StudyPage } from './ui/pages/StudyPage'
 import { useTheme } from './ui/theme'
 
@@ -42,7 +43,8 @@ export default function App() {
           />
           <Route path="/decks/:deckId/study" element={<StudyPage />} />
           <Route path="/import" element={<ImportPage />} />
-          <Route path="/math-lab" element={<MathLabPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <ReloadPrompt />

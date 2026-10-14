@@ -516,12 +516,14 @@ textarea {
   grid-template-rows: auto 1fr auto;
   aspect-ratio: 1 / 1;
   min-height: 180px;
+  min-width: 0;
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   padding: 0.65rem;
   gap: 0.45rem;
+  overflow: hidden;
 }
 
 .flash-card-top {
@@ -596,8 +598,28 @@ textarea {
   align-items: center;
   justify-content: center;
   text-align: center;
-  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  overflow: hidden;
   padding: 0.2rem;
+}
+
+.flash-card-content .blocks {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.flash-card-content .katex,
+.flash-card-content .katex-display {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.flash-card-grid > * {
+  min-width: 0;
 }
 
 .flash-card-hint {
@@ -1283,4 +1305,228 @@ textarea {
   .flash-card {
     aspect-ratio: 1 / 1;
   }
+}
+
+/* —— Home chrome (bell + avatar) —— */
+.home-chrome-actions {
+  gap: 0.45rem;
+}
+
+.chrome-icon-btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-elev);
+  color: var(--ink);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.chrome-icon-btn:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.chrome-avatar-btn {
+  padding: 0;
+  overflow: hidden;
+}
+
+.chrome-avatar-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.chrome-badge {
+  position: absolute;
+  top: -0.2rem;
+  right: -0.2rem;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1.1rem;
+  text-align: center;
+}
+
+/* —— Settings (Spotiflac-inspired groups) —— */
+.settings-page {
+  max-width: 560px;
+}
+
+.settings-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-elev);
+  color: inherit;
+  text-decoration: none;
+}
+
+.settings-profile-card:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.settings-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.settings-profile-text {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.settings-group {
+  margin-bottom: 1.25rem;
+}
+
+.settings-group-title {
+  margin: 0 0 0.45rem;
+  padding-left: 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.settings-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-elev);
+  overflow: hidden;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 0;
+  font: inherit;
+}
+
+.settings-card > .settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-row:hover {
+  background: color-mix(in srgb, var(--bg) 55%, var(--bg-elev));
+  text-decoration: none;
+}
+
+.settings-row.static {
+  cursor: default;
+}
+
+.settings-row.static:hover {
+  background: transparent;
+}
+
+.settings-row-main {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.settings-row-main > span:last-child {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.settings-row-select {
+  cursor: default;
+}
+
+.settings-row-select select {
+  width: auto;
+  min-width: 7rem;
+  flex-shrink: 0;
+}
+
+.settings-icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.settings-icon-blue { background: #0969da; }
+.settings-icon-green { background: #1a7f37; }
+.settings-icon-purple { background: #8250df; }
+.settings-icon-yellow { background: #9a6700; }
+.settings-icon-teal { background: #1b7c83; }
+.settings-icon-ink { background: #24292f; }
+
+.settings-chevron {
+  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.notif-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.notif-item {
+  display: grid;
+  gap: 0.25rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-elev);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.notif-item.is-unread {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+.notif-meta {
+  font-size: 0.8rem;
 }

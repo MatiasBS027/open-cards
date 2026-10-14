@@ -2,6 +2,22 @@
 
 All notable changes to Open Cards are documented here.
 
+## [v0.1.2](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.2) — 2026-10-14
+
+### Added
+
+- OC monogram logo (geometric O + blue C) for app, PWA, and Android icons.
+- Settings page (GitHub profile, theme, import/export, APK/repo links).
+- Notifications inbox + home bell; backup reminder also lands there.
+
+### Fixed
+
+- Flashcard grid overflow on phone: clip content that does not fit.
+
+### Changed
+
+- Home chrome: avatar → settings; removed Math lab / import-export from header.
+
 ## [v0.1.1](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.1) — 2026-10-14
 
 ### Added

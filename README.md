@@ -32,7 +32,7 @@ Muchas apps de flashcards meten tu progreso en la nube, te empujan a una cuenta 
 
 Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y trozos de código. El contenido importado es **dato**, nunca se ejecuta.
 
-> Estado actual (v0.1.1): MVP usable. En Android preferimos el **APK**; Pages queda como demo web en PC. Sin cuentas ni sync: el puente entre dispositivos es importar/exportar JSON. Detalle en [`SPEC.md`](SPEC.md) y [`CHANGELOG.md`](CHANGELOG.md).
+> Estado actual (v0.1.2): MVP usable. En Android preferimos el **APK**; Pages queda como demo web en PC. Sin cuentas ni sync: el puente entre dispositivos es importar/exportar JSON. Detalle en [`SPEC.md`](SPEC.md) y [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Características
 
