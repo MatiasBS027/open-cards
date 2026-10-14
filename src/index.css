@@ -1,7 +1,9 @@
 :root {
   color-scheme: light;
+  /* Primer-like canvas / elevated surfaces (no cream or teal washes). */
   --bg: #f6f8fa;
   --bg-elev: #ffffff;
+  --bg-inset: #ffffff;
   --ink: #1f2328;
   --muted: #656d76;
   --accent: #0969da;
@@ -36,6 +38,7 @@ html[data-theme='dark'] {
   color-scheme: dark;
   --bg: #0d1117;
   --bg-elev: #161b22;
+  --bg-inset: #161b22;
   --ink: #e6edf3;
   --muted: #8b949e;
   --accent: #2f81f7;
@@ -54,12 +57,17 @@ html[data-theme='dark'] {
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
+html,
+body,
+#root {
   min-width: 320px;
   min-height: 100vh;
   background: var(--bg);
   color: var(--ink);
+}
+
+body {
+  margin: 0;
 }
 
 a {
@@ -396,9 +404,9 @@ textarea {
   display: inline-flex;
   align-items: center;
   padding: 0.1rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--bg-inset);
   color: var(--muted);
   font-size: 0.75rem;
   font-family: var(--font-mono);
@@ -425,7 +433,7 @@ textarea {
   padding: 1rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);
-  background: var(--bg);
+  background: var(--bg-elev);
   color: var(--ink);
   box-shadow: none;
   white-space: normal;
@@ -433,7 +441,7 @@ textarea {
 
 .deck-create-card:hover {
   border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 4%, var(--bg));
+  background: var(--bg-elev);
 }
 
 .deck-create-plus {
@@ -463,7 +471,7 @@ textarea {
   padding: 0.85rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);
-  background: var(--bg);
+  background: var(--bg-inset);
 }
 
 .file-picker-input {
@@ -492,13 +500,14 @@ textarea {
   padding: 1rem;
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);
-  background: var(--bg);
+  background: var(--bg-elev);
   color: var(--ink);
   text-decoration: none;
 }
 
 .flash-create-card:hover {
   border-color: var(--accent);
+  background: var(--bg-elev);
   text-decoration: none;
 }
 
@@ -527,7 +536,7 @@ textarea {
   flex-shrink: 0;
   padding: 0.25rem 0.4rem;
   border-radius: var(--radius);
-  background: var(--bg);
+  background: var(--bg-inset);
 }
 
 .drag-handle {
@@ -988,7 +997,7 @@ textarea {
   padding: 0.65rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: var(--bg);
+  background: var(--bg-inset);
   overflow: hidden;
 }
 
@@ -1031,7 +1040,7 @@ textarea {
   padding: 0.65rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: var(--bg);
+  background: var(--bg-inset);
   font-family: var(--font-mono);
   font-size: 0.85rem;
 }
@@ -1045,6 +1054,13 @@ textarea {
   padding: 0.45rem;
   background: var(--bg-elev);
   color: var(--ink);
+  /* Keep MathLive chrome on Primer blue, not default teal-ish hues. */
+  --hue: 212;
+  --contains-highlight-background-color: color-mix(
+    in srgb,
+    var(--accent) 12%,
+    var(--bg-elev)
+  );
 }
 
 .katex-block {
@@ -1092,7 +1108,7 @@ textarea {
   padding: 0.85rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: var(--bg);
+  background: var(--bg-inset);
 }
 
 .preview-panel.align-start {
