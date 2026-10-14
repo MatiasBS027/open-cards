@@ -60,7 +60,7 @@ TypeScript estricto, Vite, React, Dexie (IndexedDB), MathLive, KaTeX, CodeMirror
 
 ## Despliegue
 
-- **APK (principal en Android):** Capacitor envuelve el mismo build web. Siempre `VITE_BASE=/`. Publicar: bump `package.json` version, `git tag vX.Y.Z && git push origin vX.Y.Z` → `android-apk.yml` adjunta el APK a la Release. Sin sync ni backend; datos = IndexedDB local + JSON import/export. La app puede avisar de updates leyendo la API pública de Releases (abre el enlace del APK; no fuerza instalación).
+- **APK (principal en Android):** Capacitor envuelve el mismo build web. Siempre `VITE_BASE=/`. Publicar: bump `package.json` version, `git tag vX.Y.Z && git push origin vX.Y.Z` → `android-apk.yml` adjunta el APK firmado a la Release. Keystore solo en secrets de Actions (`ANDROID_KEYSTORE_*`); nunca commitir `.jks` / `signing/`. Sin sync ni backend; datos = IndexedDB local + JSON import/export. La app puede avisar de updates leyendo la API pública de Releases (abre el enlace del APK; no fuerza instalación).
 - **Demo web / PC:** GitHub Pages (`VITE_BASE=/open-cards/`, `HashRouter`). No sustituye al APK en el teléfono del autor.
 
 ## Cuando falte información

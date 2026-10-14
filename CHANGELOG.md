@@ -2,6 +2,17 @@
 
 All notable changes to Open Cards are documented here.
 
+## [v0.1.6](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.6) — 2026-10-14
+
+### Fixed
+
+- Deck card grid: preview-only by default (no overlapping Editar/Duplicar/Eliminar). **Editar tarjetas** toggles the manage/reorder chrome.
+
+### Changed
+
+- APK Releases are signed with a stable keystore stored only as GitHub Actions secrets (not in git). Artifact name: `open-cards-vX.Y.Z.apk`.
+- One-time uninstall needed when upgrading from unsigned/debug CI APKs (v0.1.0–v0.1.5) because the signing key changed.
+
 ## [v0.1.5](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.5) — 2026-10-14
 
 ### Added

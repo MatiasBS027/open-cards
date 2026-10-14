@@ -45,6 +45,7 @@ import { UndoToast } from '../components/UndoToast'
 function SortableCard({
   card,
   flipped,
+  editing,
   otherDecks,
   onFlip,
   onOpen,
@@ -54,6 +55,7 @@ function SortableCard({
 }: {
   card: Card
   flipped: boolean
+  editing: boolean
   otherDecks: Deck[]
   onFlip: () => void
   onOpen: () => void
@@ -69,7 +71,7 @@ function SortableCard({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: card.id })
+  } = useSortable({ id: card.id, disabled: !editing })
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -78,19 +80,23 @@ function SortableCard({
     <article
       ref={setNodeRef}
       style={style}
-      className={`flash-card${isDragging ? ' is-dragging' : ''}`}
+      className={`flash-card${editing ? ' is-editing' : ''}${isDragging ? ' is-dragging' : ''}`}
     >
       <header className="flash-card-top">
-        <button
-          ref={setActivatorNodeRef}
-          type="button"
-          className="drag-handle flash-card-drag"
-          aria-label="Arrastrar para reordenar"
-          {...attributes}
-          {...listeners}
-        >
-          ⋮⋮
-        </button>
+        {editing ? (
+          <button
+            ref={setActivatorNodeRef}
+            type="button"
+            className="drag-handle flash-card-drag"
+            aria-label="Arrastrar para reordenar"
+            {...attributes}
+            {...listeners}
+          >
+            ⋮⋮
+          </button>
+        ) : (
+          <span className="flash-card-drag-spacer" aria-hidden />
+        )}
         <span className="flash-card-state">{stateLabel(card.state)}</span>
       </header>
       <button type="button" className="flash-card-body" onClick={onFlip}>
@@ -101,38 +107,44 @@ function SortableCard({
           {flipped ? 'Reverso' : 'Frente'} · tocar para voltear
         </span>
       </button>
-      <div className="flash-card-side-actions">
-        <button type="button" className="button-quiet" onClick={onOpen}>
-          Editar
-        </button>
-        <button type="button" className="button-quiet" onClick={onDuplicate}>
-          Duplicar
-        </button>
-        <button type="button" className="button-quiet danger" onClick={onDelete}>
-          Eliminar
-        </button>
-        {otherDecks.length > 0 ? (
-          <select
-            className="move-card-select"
-            aria-label="Mover a otro mazo"
-            defaultValue=""
-            onChange={(e) => {
-              const target = e.target.value
-              e.target.value = ''
-              if (target) onMove(target)
-            }}
+      {editing ? (
+        <div className="flash-card-side-actions">
+          <button type="button" className="button-quiet" onClick={onOpen}>
+            Editar
+          </button>
+          <button type="button" className="button-quiet" onClick={onDuplicate}>
+            Duplicar
+          </button>
+          <button
+            type="button"
+            className="button-quiet danger"
+            onClick={onDelete}
           >
-            <option value="" disabled>
-              Mover a…
-            </option>
-            {otherDecks.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.name}
+            Eliminar
+          </button>
+          {otherDecks.length > 0 ? (
+            <select
+              className="move-card-select"
+              aria-label="Mover a otro mazo"
+              defaultValue=""
+              onChange={(e) => {
+                const target = e.target.value
+                e.target.value = ''
+                if (target) onMove(target)
+              }}
+            >
+              <option value="" disabled>
+                Mover a…
               </option>
-            ))}
-          </select>
-        ) : null}
-      </div>
+              {otherDecks.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
+            </select>
+          ) : null}
+        </div>
+      ) : null}
     </article>
   )
 }
@@ -157,6 +169,7 @@ export function DeckPage() {
   const [hasSession, setHasSession] = useState(false)
   const [undoCard, setUndoCard] = useState<Card | null>(null)
   const [editingMeta, setEditingMeta] = useState(false)
+  const [editingCards, setEditingCards] = useState(false)
   const [editName, setEditName] = useState('')
   const [editDescription, setEditDescription] = useState('')
   const [editTags, setEditTags] = useState('')
@@ -387,7 +400,18 @@ export function DeckPage() {
       )}
 
       <section className="section-gap">
-        <h2>Tarjetas ({cards.length})</h2>
+        <div className="section-heading-row">
+          <h2>Tarjetas ({cards.length})</h2>
+          {cards.length > 0 ? (
+            <button
+              type="button"
+              className="ghost"
+              onClick={() => setEditingCards((v) => !v)}
+            >
+              {editingCards ? 'Listo' : 'Editar tarjetas'}
+            </button>
+          ) : null}
+        </div>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -412,6 +436,7 @@ export function DeckPage() {
                   key={card.id}
                   card={card}
                   flipped={Boolean(flipped[card.id])}
+                  editing={editingCards}
                   otherDecks={otherDecks}
                   onFlip={() => {
                     setFlipped((f) => ({ ...f, [card.id]: !f[card.id] }))

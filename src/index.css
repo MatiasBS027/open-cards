@@ -511,9 +511,21 @@ textarea {
   text-decoration: none;
 }
 
+.section-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.section-heading-row h2 {
+  margin: 0;
+}
+
 .flash-card {
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   aspect-ratio: 1 / 1;
   min-height: 180px;
   min-width: 0;
@@ -526,6 +538,12 @@ textarea {
   overflow: hidden;
 }
 
+.flash-card.is-editing {
+  grid-template-rows: auto 1fr auto;
+  aspect-ratio: auto;
+  min-height: 220px;
+}
+
 .flash-card-top {
   display: flex;
   align-items: center;
@@ -534,8 +552,14 @@ textarea {
   min-height: 2rem;
 }
 
-.flash-card-drag {
+.flash-card-drag,
+.flash-card-drag-spacer {
   flex-shrink: 0;
+  width: 2rem;
+  min-height: 1.75rem;
+}
+
+.flash-card-drag {
   padding: 0.25rem 0.4rem;
   border-radius: var(--radius);
   background: var(--bg-inset);

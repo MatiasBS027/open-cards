@@ -469,7 +469,7 @@ Una tarjeta es válida si frente y reverso tienen al menos un bloque con conteni
 5. ~~**Resto del MVP**~~ — PWA, Pages, APK, búsqueda/filtro, aviso 14 días, duplicar/mover, ajustes/perfil local, aviso de actualización APK.
 6. **Calidad y docs:** aceptar §19, accesibilidad, mantener SPEC/AGENTS/CHANGELOG.
 
-**Despliegue:** el camino principal en teléfono es el **APK** (Capacitor). Tag `v*` → workflow Android → GitHub Release. Push a `main` actualiza la demo en GitHub Pages (útil en PC / compartir enlace). Pages y APK no comparten IndexedDB; sin sync en la nube, el puente de datos es importar/exportar JSON. La app puede avisar de una Release más nueva abriendo el enlace del APK. El aviso solo aparece tras publicar un tag `v*` (bump `package.json` + push del tag); sin Release nueva no hay update que mostrar.
+**Despliegue:** el camino principal en teléfono es el **APK** (Capacitor). Tag `v*` → workflow Android → GitHub Release firmada con keystore estable (solo secrets de Actions; nunca en git). Push a `main` actualiza la demo en GitHub Pages (útil en PC / compartir enlace). Pages y APK no comparten IndexedDB; sin sync en la nube, el puente de datos es importar/exportar JSON. La app puede avisar de una Release más nueva abriendo el enlace del APK. El aviso solo aparece tras publicar un tag `v*` (bump `package.json` + push del tag); sin Release nueva no hay update que mostrar.
 
 ### Siguiente iteración (inspirado en SpotiFLAC; opcional)
 

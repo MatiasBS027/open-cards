@@ -26,6 +26,13 @@ android/.idea/
 *.aab
 *.ap_
 *.dex
+*.jks
+*.keystore
+*.p12
+signing/
+android/keystore.properties
+android/*.jks
+android/*.keystore
 
 # Editor directories and files
 .vscode/*
