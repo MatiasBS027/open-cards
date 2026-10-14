@@ -1,96 +1,163 @@
+<div align="center">
+
+<img src="public/icon.svg" alt="Open Cards" width="96" height="96">
+
 # Open Cards
 
-Aplicación de tarjetas de estudio de código abierto, **local-first** y sin conexión. Pensada para estudiar con matemáticas (LaTeX) y código, sin gamificación ni cuentas.
+**Flashcards locales que puedes estudiar offline — con matemáticas y código, sin cuentas.**
 
-> Estado: núcleo usable en desarrollo. La especificación está en [`SPEC.md`](SPEC.md).
+Crea mazos, edita tarjetas con LaTeX y bloques de código, estudia en el teléfono o en el PC.<br>
+Todo vive en tu navegador. Sin servidor, sin suscripción, sin gamificación.
 
-## Características (MVP)
+[![License: MIT](https://img.shields.io/badge/license-MIT-3dbaa3?style=flat-square)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/MatiasBS027/open-cards?style=flat-square&logo=github&logoColor=white)](https://github.com/MatiasBS027/open-cards/stargazers)
+[![Pages](https://img.shields.io/github/actions/workflow/status/MatiasBS027/open-cards/deploy-pages.yml?branch=main&label=pages&style=flat-square)](https://github.com/MatiasBS027/open-cards/actions/workflows/deploy-pages.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8?style=flat-square)](https://matiasbs027.github.io/open-cards/)
 
-- Mazos y tarjetas con bloques de texto, matemáticas (LaTeX) y código.
-- LaTeX también dentro de una frase: `$x^2$`.
-- Orden de tarjetas editable arrastrando.
-- Estudio con filtro (todas / no vistas / para repasar), orden secuencial o aleatorio, y sesión que se puede retomar.
-- Estados por tarjeta: no vista, vista, comprendida, para repasar.
-- Etiquetas, búsqueda y filtros.
-- Importación y exportación en JSON (un mazo o toda la biblioteca), con borrador de revisión antes de guardar.
-- PWA instalable, funciona sin conexión, modo oscuro.
+[Demo en vivo](https://matiasbs027.github.io/open-cards/) ·
+[Especificación](SPEC.md) ·
+[Esquema JSON](schema/open-cards.v1.schema.json) ·
+[Guía para agentes](AGENTS.md)
 
-## Stack
+</div>
 
-TypeScript, Vite, React, Dexie (IndexedDB), MathLive + KaTeX, CodeMirror 6, `@dnd-kit`, `vite-plugin-pwa`, Vitest.
+---
 
-## Empezar
+## Por qué Open Cards
 
-Requisitos: Node.js 20 o superior.
+Muchas apps de flashcards meten tu progreso en la nube, te empujan a una cuenta o se llenan de rachas y monedas. Open Cards va al revés: **tus mazos son tuyos**, se guardan en IndexedDB, se exportan a un JSON documentado y se estudian sin red.
+
+Está pensada para materias con fórmulas (probabilidad, álgebra, física…) y trozos de código. El contenido importado es **dato**, nunca se ejecuta.
+
+> Estado actual: núcleo usable (mazos, editor, estudio, import/export, PWA). La hoja de ruta del producto está en [`SPEC.md`](SPEC.md).
+
+## Características
+
+**Mazos y tarjetas**
+
+- Mazos con nombre, descripción y etiquetas.
+- Tarjetas con bloques combinables: texto, matemáticas y código.
+- LaTeX en línea dentro del texto (`$x^2$`) y fórmulas destacadas con MathLive + KaTeX.
+- Código con resaltado (CodeMirror); nunca se ejecuta.
+- Reordenar tarjetas arrastrando (ratón, tacto y teclado).
+
+**Estudio**
+
+- Filtro: todas / no vistas / para repasar.
+- Orden secuencial o aleatorio (el aleatorio solo afecta a la sesión).
+- Sesión retomable si sales a mitad.
+- Estados claros: no vista → vista → comprendida / para repasar.
+- Voltear con un toque; botones de calificación en la sesión.
+
+**Datos**
+
+- Importar y exportar un mazo o toda la biblioteca en JSON.
+- La importación pasa siempre por un **borrador editable** y no escribe nada hasta que confirmas.
+- Importar crea mazos nuevos con IDs nuevos; no inventa tarjetas.
+- Deshacer eliminación (~8 s) con confirmación al borrar un mazo.
+
+**App**
+
+- PWA instalable; funciona offline.
+- Tema claro / oscuro / sistema.
+- Interfaz en español; código y esquema en inglés.
+
+## Probarlo ya
+
+No hace falta clonar el repo:
+
+1. Abre la [demo en GitHub Pages](https://matiasbs027.github.io/open-cards/).
+2. En Android (Chrome): menú → **Instalar aplicación** / **Añadir a la pantalla de inicio**.
+3. Opcional: importa un ejemplo desde [`examples/`](examples/) (p. ej. [`probabilidad-biblioteca.json`](examples/probabilidad-biblioteca.json)).
+
+Todo se guarda en **tu** navegador. Si borras los datos del sitio, se pierden: exporta respaldos con regularidad.
+
+## Inicio rápido
+
+Requisitos: [Node.js](https://nodejs.org/) 20+ y [pnpm](https://pnpm.io/).
 
 ```bash
+git clone https://github.com/MatiasBS027/open-cards.git
+cd open-cards
 pnpm install
-pnpm dev           # servidor de desarrollo
-pnpm test          # pruebas (Vitest)
-pnpm build         # build de producción en dist/
-pnpm preview       # previsualizar el build
+pnpm dev
 ```
 
-La ruta base para GitHub Pages se configura con la variable `VITE_BASE` (por defecto `/open-cards/`). En CI se usa `/{nombre-del-repo}/`.
+| Comando | Qué hace |
+|---|---|
+| `pnpm dev` | Servidor de desarrollo |
+| `pnpm test` | Pruebas (Vitest) |
+| `pnpm build` | Build de producción en `dist/` |
+| `pnpm preview` | Previsualizar el build |
+| `pnpm lint` | Linter (oxlint) |
 
-## GitHub Pages (Android / PWA)
+La ruta base de GitHub Pages se configura con `VITE_BASE` (por defecto `/open-cards/`). El workflow de CI la ajusta al nombre del repositorio.
 
-El workflow [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) construye con pnpm/Vite y publica `dist/`.
+## Cómo funciona
 
-### Pasos manuales (si aún no está publicado)
+```
+src/domain/        reglas puras (tipos, estados, orden, etiquetas) — sin React ni Dexie
+src/storage/       IndexedDB vía Dexie, migraciones y repositorios
+src/importExport/  validación Ajv + borradores de importación / exportación
+src/ui/            pantallas React
+src/math/          renderizado KaTeX (trust: false)
+schema/            open-cards.v1.schema.json
+examples/          JSON de demostración
+```
 
-1. Crea un repositorio en GitHub (recomendado: `open-cards`) y súbelo:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial Open Cards app"
-   git branch -M main
-   git remote add origin https://github.com/<TU_USUARIO>/open-cards.git
-   git push -u origin main
-   ```
-2. En el repo: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. Tras el workflow verde, la URL será:
-   `https://<TU_USUARIO>.github.io/<nombre-del-repo>/`
-   (con HashRouter, las rutas van después de `#/`, p. ej. `.../open-cards/#/`).
-4. En Android: abre esa URL en Chrome → menú → **Instalar aplicación** / **Añadir a la pantalla de inicio**.
+Dependencias permitidas: `ui` → `storage` / `importExport` → `domain`. Nunca al revés.
 
-Si el repo no se llama `open-cards`, el workflow ya ajusta `VITE_BASE` al nombre del repo.
+**Seguridad del contenido**
 
-## Tus datos
+- No se usa `dangerouslySetInnerHTML` / `innerHTML` con texto de tarjetas.
+- KaTeX es el único HTML inyectado permitido, siempre con `trust: false`.
+- El código de las tarjetas se muestra como texto; no se evalúa.
 
-Todo se guarda en el navegador (IndexedDB). Si borras los datos del sitio, se pierden. **Exporta respaldos con regularidad** desde la app (un mazo o toda la biblioteca).
+**Persistencia**
+
+Todo vive en IndexedDB. Al arrancar se pide `navigator.storage.persist()` cuando el navegador lo permite. Un respaldo completo es exportar la biblioteca a JSON.
 
 ## Formato JSON
 
-El esquema está en [`schema/open-cards.v1.schema.json`](schema/open-cards.v1.schema.json).
+El contrato público está en [`schema/open-cards.v1.schema.json`](schema/open-cards.v1.schema.json).
 
-Ejemplos:
+| Archivo | Contenido |
+|---|---|
+| [`examples/ejemplo-biblioteca.json`](examples/ejemplo-biblioteca.json) | Biblioteca corta de demostración |
+| [`examples/probabilidad-biblioteca.json`](examples/probabilidad-biblioteca.json) | Varios mazos de V.A.D. (series, varianza/FGM, modelos discretos) |
 
-- [`examples/ejemplo-biblioteca.json`](examples/ejemplo-biblioteca.json) — biblioteca corta de demostración.
-- [`examples/probabilidad-biblioteca.json`](examples/probabilidad-biblioteca.json) — varios mazos de V.A.D. (series, varianza/FGM, modelos discretos) para probar importación.
+**Importar un ejemplo**
 
-### Cómo importar un ejemplo
+1. App → **Importar**.
+2. Elige el archivo (o pégalo).
+3. Revisa el borrador (nombre, etiquetas, tarjetas) y confirma mazo a mazo.
 
-1. Abre la app → **Importar**.
-2. Elige el archivo JSON (o pégalo).
-3. Revisa el borrador (nombre, descripción, etiquetas, tarjetas) y confirma.
-4. La importación **nunca** escribe en la base hasta que confirmas; crea mazos nuevos con IDs nuevos.
+## Documentación
 
-## Estructura
-
-```
-src/domain/        reglas puras (sin React ni Dexie)
-src/storage/       persistencia con Dexie
-src/importExport/  esquema, validación e importación/exportación
-src/ui/            interfaz React
-schema/            esquema JSON
-examples/          archivos de ejemplo
-```
+| Quiero… | Leer |
+|---|---|
+| Entender el producto y las reglas de negocio | [`SPEC.md`](SPEC.md) |
+| Convenciones para contribuir o usar un agente de código | [`AGENTS.md`](AGENTS.md) |
+| Validar o generar JSON compatible | [`schema/open-cards.v1.schema.json`](schema/open-cards.v1.schema.json) |
+| Ver cómo se despliega la demo | [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) |
 
 ## Contribuir
 
-Lee [`AGENTS.md`](AGENTS.md) para las convenciones del proyecto.
+Issues y pull requests son bienvenidos. Antes de abrir un PR grande, lee [`SPEC.md`](SPEC.md) (sobre todo el alcance del MVP) y [`AGENTS.md`](AGENTS.md).
+
+Checklist mínimo:
+
+```bash
+pnpm test
+pnpm build
+pnpm lint
+```
+
+Los cambios en `src/domain/` y en importación/exportación deben llevar pruebas Vitest.
 
 ## Licencia
 
-[MIT](LICENSE)
+[MIT](LICENSE) — Copyright (c) 2026 Matias.
+
+Puedes usar, modificar y redistribuir el código con pocas restricciones. Tus mazos y exportaciones te pertenecen; la app no los sube a ningún servidor.
