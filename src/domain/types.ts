@@ -67,6 +67,10 @@ export interface Settings {
   hasLocalChangesSinceBackup: boolean
   storagePersistAsked: boolean
   notifications: AppNotification[]
+  /** Local display name — not tied to GitHub or any account. */
+  profileName: string
+  /** Optional local avatar as a data URL (JPEG/PNG), or null for the default person icon. */
+  profileAvatarDataUrl: string | null
 }
 
 export interface DeckProgress {

@@ -34,11 +34,17 @@ export const db = new OpenCardsDB()
 export async function ensureSettings(): Promise<Settings> {
   const existing = await db.settings.get('app')
   if (existing) {
-    const normalized = {
+    const normalized: Settings = {
       ...existing,
       notifications: existing.notifications ?? [],
+      profileName: existing.profileName ?? '',
+      profileAvatarDataUrl: existing.profileAvatarDataUrl ?? null,
     }
-    if (!existing.notifications) {
+    if (
+      !existing.notifications ||
+      existing.profileName === undefined ||
+      existing.profileAvatarDataUrl === undefined
+    ) {
       await db.settings.put(normalized)
     }
     return normalized
@@ -50,9 +56,20 @@ export async function ensureSettings(): Promise<Settings> {
     hasLocalChangesSinceBackup: false,
     storagePersistAsked: false,
     notifications: [],
+    profileName: '',
+    profileAvatarDataUrl: null,
   }
   await db.settings.put(defaults)
   return defaults
+}
+
+export async function updateProfile(patch: {
+  profileName?: string
+  profileAvatarDataUrl?: string | null
+}): Promise<Settings> {
+  await ensureSettings()
+  await db.settings.update('app', patch)
+  return ensureSettings()
 }
 
 export async function markLocalChange(): Promise<void> {

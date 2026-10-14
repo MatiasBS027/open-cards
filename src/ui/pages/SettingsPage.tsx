@@ -1,23 +1,66 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { ThemePreference } from '../../domain/types'
 import { downloadJson, exportAll } from '../../importExport/exportLibrary'
+import { ensureSettings, updateProfile } from '../../storage/db'
+import { PersonIcon } from '../components/PersonIcon'
+import { fileToAvatarDataUrl } from '../profileAvatar'
 import { useTheme } from '../theme'
-
-const GITHUB_USER = 'MatiasBS027'
-const GITHUB_URL = `https://github.com/${GITHUB_USER}`
-const AVATAR_URL = `https://github.com/${GITHUB_USER}.png?size=96`
 
 export function SettingsPage() {
   const { theme, setTheme } = useTheme()
   const [exporting, setExporting] = useState(false)
+  const [name, setName] = useState('')
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+  const [editingProfile, setEditingProfile] = useState(false)
+  const [draftName, setDraftName] = useState('')
+  const [profileError, setProfileError] = useState('')
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const reloadProfile = async () => {
+    const settings = await ensureSettings()
+    setName(settings.profileName)
+    setAvatarUrl(settings.profileAvatarDataUrl)
+  }
 
   useEffect(() => {
     document.title = 'Ajustes · Open Cards'
+    void reloadProfile()
     return () => {
       document.title = 'Open Cards'
     }
   }, [])
+
+  const openProfileEditor = () => {
+    setDraftName(name)
+    setProfileError('')
+    setEditingProfile(true)
+  }
+
+  const saveProfile = async () => {
+    await updateProfile({ profileName: draftName.trim() })
+    setEditingProfile(false)
+    await reloadProfile()
+  }
+
+  const onPickPhoto = async (file: File | null) => {
+    if (!file) return
+    setProfileError('')
+    try {
+      const dataUrl = await fileToAvatarDataUrl(file)
+      await updateProfile({ profileAvatarDataUrl: dataUrl })
+      await reloadProfile()
+    } catch (err) {
+      setProfileError(err instanceof Error ? err.message : 'No se pudo usar la imagen.')
+    }
+  }
+
+  const clearPhoto = async () => {
+    await updateProfile({ profileAvatarDataUrl: null })
+    await reloadProfile()
+  }
+
+  const displayName = name.trim() || 'Tu perfil'
 
   return (
     <div className="page settings-page">
@@ -30,28 +73,108 @@ export function SettingsPage() {
         </div>
       </header>
 
-      <a
-        className="settings-profile-card"
-        href={GITHUB_URL}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <img
-          className="settings-avatar"
-          src={AVATAR_URL}
-          alt=""
-          width={48}
-          height={48}
-          decoding="async"
-        />
-        <span className="settings-profile-text">
-          <strong>@{GITHUB_USER}</strong>
-          <span className="muted">Perfil en GitHub</span>
-        </span>
-        <span className="settings-chevron" aria-hidden>
-          ›
-        </span>
-      </a>
+      {!editingProfile ? (
+        <button
+          type="button"
+          className="settings-profile-card"
+          onClick={openProfileEditor}
+        >
+          <span className="settings-avatar-wrap">
+            {avatarUrl ? (
+              <img
+                className="settings-avatar"
+                src={avatarUrl}
+                alt=""
+                width={48}
+                height={48}
+                decoding="async"
+              />
+            ) : (
+              <span className="settings-avatar settings-avatar-placeholder">
+                <PersonIcon size={26} />
+              </span>
+            )}
+          </span>
+          <span className="settings-profile-text">
+            <strong>{displayName}</strong>
+            <span className="muted">Editar nombre y foto</span>
+          </span>
+          <span className="settings-chevron" aria-hidden>
+            ›
+          </span>
+        </button>
+      ) : (
+        <section className="panel stack settings-profile-editor">
+          <h2>Tu perfil</h2>
+          <p className="muted">
+            Solo se guarda en este dispositivo. No está ligado a GitHub ni a ninguna
+            cuenta.
+          </p>
+          <div className="settings-avatar-edit">
+            {avatarUrl ? (
+              <img
+                className="settings-avatar settings-avatar-lg"
+                src={avatarUrl}
+                alt=""
+                width={72}
+                height={72}
+              />
+            ) : (
+              <span className="settings-avatar settings-avatar-lg settings-avatar-placeholder">
+                <PersonIcon size={36} />
+              </span>
+            )}
+            <div className="row gap wrap">
+              <button
+                type="button"
+                className="button-quiet"
+                onClick={() => fileRef.current?.click()}
+              >
+                Elegir foto
+              </button>
+              {avatarUrl ? (
+                <button type="button" className="button-quiet" onClick={() => void clearPhoto()}>
+                  Quitar foto
+                </button>
+              ) : null}
+            </div>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              className="file-picker-input"
+              onChange={(e) => {
+                const file = e.target.files?.[0] ?? null
+                e.target.value = ''
+                void onPickPhoto(file)
+              }}
+            />
+          </div>
+          <label className="field">
+            <span>Nombre</span>
+            <input
+              value={draftName}
+              onChange={(e) => setDraftName(e.target.value)}
+              placeholder="Cómo te llamas aquí"
+              maxLength={80}
+              autoFocus
+            />
+          </label>
+          {profileError ? <p className="math-error">{profileError}</p> : null}
+          <div className="row gap wrap">
+            <button type="button" onClick={() => void saveProfile()}>
+              Guardar
+            </button>
+            <button
+              type="button"
+              className="ghost"
+              onClick={() => setEditingProfile(false)}
+            >
+              Cancelar
+            </button>
+          </div>
+        </section>
+      )}
 
       <section className="settings-group" aria-label="Apariencia">
         <h2 className="settings-group-title">Apariencia</h2>
@@ -134,7 +257,7 @@ export function SettingsPage() {
               </span>
               <span>
                 <strong>Versión</strong>
-                <span className="muted">0.1.2 · local-first</span>
+                <span className="muted">0.1.4 · local-first</span>
               </span>
             </span>
           </div>

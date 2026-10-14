@@ -2,6 +2,20 @@
 
 All notable changes to Open Cards are documented here.
 
+## [v0.1.4](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.4) — 2026-10-14
+
+### Changed
+
+- Local profile (name + photo) in Settings — not tied to GitHub.
+- Home chrome uses a person icon by default (Spotiflac-style); custom photo when set.
+- Bell / settings controls aligned with Primer radii and muted icons.
+
+## [v0.1.3](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.3) — 2026-10-14
+
+### Fixed
+
+- OC logo uses typographic monogram (clear C) matching Figma.
+
 ## [v0.1.2](https://github.com/MatiasBS027/open-cards/releases/tag/v0.1.2) — 2026-10-14
 
 ### Added

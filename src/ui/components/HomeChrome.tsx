@@ -2,8 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { shouldShowBackupReminder } from '../../domain/backup'
 import { ensureSettings } from '../../storage/db'
-import { pushNotification, unreadNotificationCount } from '../../storage/notifications'
+import {
+  pushNotification,
+  unreadNotificationCount,
+} from '../../storage/notifications'
 import { BrandMark } from '../brand/BrandMark'
+import { BellIcon } from './BellIcon'
+import { PersonIcon } from './PersonIcon'
 
 const BACKUP_NOTIF_ID = 'backup-reminder'
 
@@ -13,10 +18,12 @@ type Props = {
 
 export function HomeChrome({ showBrand = true }: Props) {
   const [unread, setUnread] = useState(0)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
 
   useEffect(() => {
     void (async () => {
       const settings = await ensureSettings()
+      setAvatarUrl(settings.profileAvatarDataUrl)
       if (shouldShowBackupReminder(settings)) {
         await pushNotification({
           id: BACKUP_NOTIF_ID,
@@ -30,7 +37,7 @@ export function HomeChrome({ showBrand = true }: Props) {
   }, [])
 
   return (
-    <header className="page-header">
+    <header className="page-header home-chrome">
       <div className="page-header-main">
         {showBrand ? (
           <h1 className="brand-heading">
@@ -48,7 +55,7 @@ export function HomeChrome({ showBrand = true }: Props) {
               : 'Notificaciones'
           }
         >
-          <span aria-hidden>🔔</span>
+          <BellIcon />
           {unread > 0 ? (
             <span className="chrome-badge">{unread > 9 ? '9+' : unread}</span>
           ) : null}
@@ -58,13 +65,11 @@ export function HomeChrome({ showBrand = true }: Props) {
           to="/settings"
           aria-label="Ajustes"
         >
-          <img
-            src="https://github.com/MatiasBS027.png?size=64"
-            alt=""
-            width={28}
-            height={28}
-            decoding="async"
-          />
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="" width={28} height={28} decoding="async" />
+          ) : (
+            <PersonIcon size={20} />
+          )}
         </Link>
       </div>
     </header>
